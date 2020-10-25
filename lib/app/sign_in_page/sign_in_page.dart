@@ -63,7 +63,7 @@ class _SignInPageState extends State<SignInPage> {
               SizedBox(height: 16),
               RaisedButton(
                 onPressed: _isLoading ? null : () => _signInWithEmail(context),
-                child: Text("Futuramente vai pra uma pagina de registro :)"),
+                child: Text("Entrar como (Lojista??)"),
               )
             ]
         )

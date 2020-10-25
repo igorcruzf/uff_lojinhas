@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:uff_lojinhas/app/sign_in_page/validators.dart';
+import 'package:uff_lojinhas/services/auth.dart';
 import "email_form_register.dart";
 
-class EmailFormLogin extends StatefulWidget {
+class EmailFormLogin extends StatefulWidget with EmailAndPasswordValidators {
   @override
   _EmailFormLoginState createState() => _EmailFormLoginState();
 }
@@ -18,6 +21,22 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
   bool _submitted = false;
   bool _isLoading = false;
 
+  void _submit() async {
+    setState(() {
+      _submitted = true;
+      _isLoading = true;
+    });
+    try {
+      final auth = Provider.of<AuthBase>(context, listen: false);
+      await auth.signInWithEmailAndPassword(_email, _password);
+      Navigator.of(context).pop();
+  } finally{
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   _updateState() {
     print("email $_email, password: $_password");
     setState(() {});
@@ -32,7 +51,9 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
     );
   }
 
+
   TextField _emailTextField(){
+    bool showErrorText = _submitted && !widget.emailValidator.isValid(_email);
     return TextField(
       focusNode: _emailFocusNode,
       keyboardType: TextInputType.emailAddress,
@@ -40,36 +61,43 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
       onChanged: (email) => _updateState(),
       decoration: InputDecoration(
         labelText: "Email",
-        hintText: "youremail@gmail.com"
+        hintText: "youremail@gmail.com",
+        errorText: showErrorText ? widget.invalidEmailErrorText : null,
       ),
     );
   }
 
   TextField _passwordTextField(){
+    bool showErrorText = _submitted && !widget.passwordValidator.isValid(_password);
     return TextField(
       focusNode: _passwordFocusNode,
+      textInputAction: TextInputAction.done,
       controller: _passwordController,
       obscureText: true,
       onChanged: (password) => _updateState(),
       decoration: InputDecoration(
-          labelText: "Password",
+        enabled: !_isLoading,
+        labelText: "Password",
+        errorText: showErrorText ? widget.invalidPasswordErrorText : null,
       ),
     );
   }
 
   List<Widget> _buildChildren() {
+    bool submitEnabled = widget.emailValidator.isValid(_email) &&
+        widget.passwordValidator.isValid(_password) && !_isLoading;
     return [
       _emailTextField(),
       SizedBox(height: 16),
       _passwordTextField(),
       SizedBox(height: 32),
       RaisedButton(
-        onPressed: () {},
-        child: Text("submit (#TODO login)"),
+        onPressed: submitEnabled ? _submit : null,
+        child: Text("Submit Login"),
       ),
       RaisedButton(
         onPressed: () => _registerWithEmail(context),
-        child: Text("Register NOW (#TODO registration)")
+        child: Text("Register NOW")
       )
     ];
   }
