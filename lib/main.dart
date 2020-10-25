@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uff_lojinhas/services/auth.dart';
-import 'app/control_page.dart';
+import 'app/screen/control_page.dart';
 
 void main() {
   runApp(MyApp());
