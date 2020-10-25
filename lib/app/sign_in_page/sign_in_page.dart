@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uff_lojinhas/services/auth.dart';
 
+import 'email_sign_in_page.dart';
+
 class SignInPage extends StatefulWidget {
   @override
   _SignInPageState createState() => _SignInPageState();
@@ -31,6 +33,16 @@ class _SignInPageState extends State<SignInPage> {
     }
   }
 
+  void _signInWithEmail(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        fullscreenDialog: false,
+        builder: (context) => EmailSignInPage(),
+      ),
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +62,7 @@ class _SignInPageState extends State<SignInPage> {
               ),
               SizedBox(height: 16),
               RaisedButton(
-                onPressed: () {},
+                onPressed: _isLoading ? null : () => _signInWithEmail(context),
                 child: Text("Futuramente vai pra uma pagina de registro :)"),
               )
             ]
