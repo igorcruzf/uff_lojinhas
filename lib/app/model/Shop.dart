@@ -9,7 +9,6 @@ class Shop {
 
   static Shop mapToShop(Map<String, dynamic> data){
     Shop shop = new Shop();
-    print(data);
     shop.idOwner = data["idOwner"];
     shop.name = data["name"];
     shop.location = data["location"];

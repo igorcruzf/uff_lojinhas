@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-import 'package:uff_lojinhas/app/sign_in_page/sign_in_page.dart';
+import 'package:uff_lojinhas/app/screen/sign_in_page/sign_in_page.dart';
 import 'package:uff_lojinhas/services/auth.dart';
 import 'home_page.dart';
 
