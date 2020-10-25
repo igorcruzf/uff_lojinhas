@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uff_lojinhas/services/auth.dart';
@@ -20,24 +21,30 @@ class CardShop extends StatelessWidget {
         onTap: () {
           print("Card " + shop.idOwner);
         },
-        child: new SizedBox(
-            width: 200.0,
+        child: new Container(
+            width: 400.0,
             height: 300.0,
             child: new Card(
-              color: Colors.white70,
+              color: Colors.white,
               child: new Column(
                 children: <Widget>[
-                  new Image.network(shop.urlPhoto),
+                  new SizedBox(
+                      width: 400.0,
+                      height: 200.0,
+                    child:
+                      new Image.network(shop.urlPhoto, fit: BoxFit.cover)
+                  )
+                  ,
                   new Padding(
-                      padding: new EdgeInsets.all(7.0),
+                      padding: new EdgeInsets.all(10.0),
                       child: new Row(
                         children: <Widget>[
                           new Padding(
-                            padding: new EdgeInsets.all(7.0),
+                            padding: new EdgeInsets.all(10.0),
                             child: new Icon(Icons.location_on),
                           ),
                           new Padding(
-                            padding: new EdgeInsets.all(7.0),
+                            padding: new EdgeInsets.all(10.0),
                             child: new Text(
                               shop.location,
                               style: new TextStyle(fontSize: 18.0),
@@ -45,13 +52,13 @@ class CardShop extends StatelessWidget {
                           ),
                           new Padding(
                             padding: new EdgeInsets.only(
-                                left: 25.0, right: 7.0, top: 7.0, bottom: 7.0),
+                                left: 25.0, right: 10.0, top: 10.0, bottom: 10.0),
                             child: new Icon(Icons.cake),
                           ),
                           new Padding(
-                            padding: new EdgeInsets.all(7.0),
+                            padding: new EdgeInsets.all(10.0),
                             child: new Text(shop.name,
-                                style: new TextStyle(fontSize: 25.0)),
+                                style: new TextStyle(fontSize: 18.0)),
                           )
                         ],
                       ))
@@ -62,6 +69,16 @@ class CardShop extends StatelessWidget {
 }
 
 class _State extends State<HomePage> {
+  Firestore db = Firestore.instance;
+  List cardList = new List<Widget>();
+
+  void getShops() {
+    db.collection("lojas").getDocuments().then((QuerySnapshot snapshot) {
+      snapshot.documents
+          .forEach((f) => cardList.add(new CardShop(Shop.mapToShop(f.data))));
+    });
+  }
+
   Future<void> _signOut(BuildContext context) async {
     try {
       final auth = Provider.of<AuthBase>(context, listen: false);
@@ -71,19 +88,9 @@ class _State extends State<HomePage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // Shop shop = new Shop();
-    //
-    // shop.location = "PV";
-    // shop.urlPhoto =
-    //     "https://panificadoramadi.files.wordpress.com/2010/03/doces-de-festa-encomenda.jpg?w=584";
-    // shop.name = "Docinhos da Gi";
-    // List cards = new List.generate(20, (i) => new CardShop(shop)).toList();
-
-    //criando os cards cada um com um objeto de shop diferente
-    List cardList = new List<Widget>();
-    for (var i = 0; i <= 20; i++) {
+  //TODO excluir depois
+  void testeDeCards() {
+    for (var i = 0; i <= 2; i++) {
       Shop shop = new Shop();
 
       shop.location = "PV";
@@ -94,6 +101,15 @@ class _State extends State<HomePage> {
 
       cardList.add(new CardShop(shop));
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //Pega todas as lojinhas no banco
+    getShops();
+
+    //criando os cards cada um com um objeto de shop diferente // MOCK
+    testeDeCards();
 
     return Scaffold(
         appBar: AppBar(
