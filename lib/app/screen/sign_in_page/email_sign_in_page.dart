@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import 'package:uff_lojinhas/app/sign_in_page/email_form_login.dart';
+import 'package:uff_lojinhas/app/screen/sign_in_page/email_form_login.dart';
 
 class EmailSignInPage extends StatelessWidget {
   @override

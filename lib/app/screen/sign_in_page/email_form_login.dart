@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uff_lojinhas/app/sign_in_page/validators.dart';
+import 'package:uff_lojinhas/app/screen/sign_in_page/validators.dart';
 import 'package:uff_lojinhas/services/auth.dart';
-import "email_form_register.dart";
+import 'email_form_register.dart';
 
 class EmailFormLogin extends StatefulWidget with EmailAndPasswordValidators {
   @override
