@@ -2,48 +2,62 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uff_lojinhas/services/auth.dart';
 
+import 'model/Shop.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _State createState() => _State();
 }
 
 class CardShop extends StatelessWidget {
+  Shop shop;
+
+  CardShop(this.shop);
+
   @override
   Widget build(BuildContext context) {
-    return new Card(
-      child: new Column(
-        children: <Widget>[
-          new Image.network(
-              'https://i.ytimg.com/vi/fq4N0hgOWzU/maxresdefault.jpg'),
-          new Padding(
-              padding: new EdgeInsets.all(7.0),
-              child: new Row(
+    return new InkWell(
+        onTap: () {
+          print("Card " + shop.idOwner);
+        },
+        child: new SizedBox(
+            width: 200.0,
+            height: 300.0,
+            child: new Card(
+              color: Colors.white70,
+              child: new Column(
                 children: <Widget>[
+                  new Image.network(shop.urlPhoto),
                   new Padding(
-                    padding: new EdgeInsets.all(7.0),
-                    child: new Icon(Icons.thumb_up),
-                  ),
-                  new Padding(
-                    padding: new EdgeInsets.all(7.0),
-                    child: new Text(
-                      'Like',
-                      style: new TextStyle(fontSize: 18.0),
-                    ),
-                  ),
-                  new Padding(
-                    padding: new EdgeInsets.all(7.0),
-                    child: new Icon(Icons.comment),
-                  ),
-                  new Padding(
-                    padding: new EdgeInsets.all(7.0),
-                    child: new Text('Comments',
-                        style: new TextStyle(fontSize: 18.0)),
-                  )
+                      padding: new EdgeInsets.all(7.0),
+                      child: new Row(
+                        children: <Widget>[
+                          new Padding(
+                            padding: new EdgeInsets.all(7.0),
+                            child: new Icon(Icons.location_on),
+                          ),
+                          new Padding(
+                            padding: new EdgeInsets.all(7.0),
+                            child: new Text(
+                              shop.location,
+                              style: new TextStyle(fontSize: 18.0),
+                            ),
+                          ),
+                          new Padding(
+                            padding: new EdgeInsets.only(
+                                left: 25.0, right: 7.0, top: 7.0, bottom: 7.0),
+                            child: new Icon(Icons.cake),
+                          ),
+                          new Padding(
+                            padding: new EdgeInsets.all(7.0),
+                            child: new Text(shop.name,
+                                style: new TextStyle(fontSize: 25.0)),
+                          )
+                        ],
+                      ))
                 ],
-              ))
-        ],
-      ),
-    );
+              ),
+            )));
   }
 }
 
@@ -59,8 +73,27 @@ class _State extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // Shop shop = new Shop();
+    //
+    // shop.location = "PV";
+    // shop.urlPhoto =
+    //     "https://panificadoramadi.files.wordpress.com/2010/03/doces-de-festa-encomenda.jpg?w=584";
+    // shop.name = "Docinhos da Gi";
+    // List cards = new List.generate(20, (i) => new CardShop(shop)).toList();
 
-    List cards = new List.generate(20, (i) => new CardShop()).toList();
+    //criando os cards cada um com um objeto de shop diferente
+    List cardList = new List<Widget>();
+    for (var i = 0; i <= 20; i++) {
+      Shop shop = new Shop();
+
+      shop.location = "PV";
+      shop.urlPhoto =
+          "https://panificadoramadi.files.wordpress.com/2010/03/doces-de-festa-encomenda.jpg?w=584";
+      shop.name = "Docinhos da Gi";
+      shop.idOwner = i.toString();
+
+      cardList.add(new CardShop(shop));
+    }
 
     return Scaffold(
         appBar: AppBar(
@@ -79,7 +112,7 @@ class _State extends State<HomePage> {
             ]),
         body: new Container(
             child: new ListView(
-          children: cards,
+          children: cardList,
         )));
   }
 }
