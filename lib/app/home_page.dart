@@ -75,7 +75,7 @@ class _State extends State<HomePage> {
   void getShops() {
     db.collection("lojas").getDocuments().then((QuerySnapshot snapshot) {
       snapshot.documents
-          .forEach((f) => cardList.add(new CardShop(Shop.mapToShop(f.data))));
+          .forEach((f) => cardList.add(new CardShop(Shop.mapToShop(f.data)))); //para cada lojinha, cria um card de lojinha
     });
   }
 
@@ -108,7 +108,8 @@ class _State extends State<HomePage> {
     //Pega todas as lojinhas no banco
     getShops();
 
-    //criando os cards cada um com um objeto de shop diferente // MOCK
+    //TODO excluir depois
+    // MOCk criando os cards cada um com um objeto de shop diferente
     testeDeCards();
 
     return Scaffold(
