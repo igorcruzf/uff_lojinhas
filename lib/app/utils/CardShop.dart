@@ -38,7 +38,21 @@ class CardShop extends StatelessWidget {
                           new Padding(
                             padding: new EdgeInsets.all(10.0),
                             child: new Text(
-                              shop.location,
+                              shop.campus,
+                              style: new TextStyle(fontSize: 18.0),
+                            ),
+                          ),
+                          new Padding(
+                            padding: new EdgeInsets.all(10.0),
+                            child: new Text(
+                              shop.block,
+                              style: new TextStyle(fontSize: 18.0),
+                            ),
+                          ),
+                          new Padding(
+                            padding: new EdgeInsets.all(10.0),
+                            child: new Text(
+                              shop.floor,
                               style: new TextStyle(fontSize: 18.0),
                             ),
                           ),

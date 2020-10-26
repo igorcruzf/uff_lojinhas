@@ -5,13 +5,17 @@ class Shop {
   String _idOwner;
   String _name;
   String _urlPhoto;
-  String _location;
+  String _campus;
+  String _block;
+  String _floor;
 
   static Shop mapToShop(Map<String, dynamic> data){
     Shop shop = new Shop();
     shop.idOwner = data["idOwner"];
     shop.name = data["name"];
-    shop.location = data["location"];
+    shop.campus = data["campus"];
+    shop.block = data["block"];
+    shop.floor = data["floor"];
     shop.urlPhoto =  data.containsKey("urlPhoto")? data["urlPhoto"] : "https://www.milliescookies.com/tco-images/unsafe/fit-in/769x386/center/middle/smart/filters:upscale():fill(white):sharpen(0.5,0.5,true)/https://www.milliescookies.com/static/uploads/2017/04/page-not-found.jpg";
     return shop;
   }
@@ -30,17 +34,31 @@ class Shop {
       "idOwner"         : this.idOwner,
       "name"            : this.name,
       "urlPhoto"        : this.urlPhoto,
-      "location"        : this.location,
+      "campus"        : this.campus,
+      "block"        : this.block,
+      "floor"        : this.floor,
     };
 
     return map;
 
   }
 
-  String get location => _location;
+  String get campus => _campus;
 
-  set location(String value) {
-    _location = value;
+  set campus(String value) {
+    _campus = value;
+  }
+
+  String get block => _block;
+
+  set block(String value) {
+    _block = value;
+  }
+
+  String get floor => _floor;
+
+  set floor(String value) {
+    _floor = value;
   }
 
   String get idOwner => _idOwner;
