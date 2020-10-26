@@ -15,3 +15,12 @@ class EmailAndPasswordValidators {
   final String invalidEmailErrorText = "Email can't be empty";
   final String invalidPasswordErrorText = "Password can't be empty";
 }
+
+class ShopFieldsValidators {
+  final StringValidator nameValidator = NonEmptyStringValidator();
+  final StringValidator campusValidator = NonEmptyStringValidator();
+  final StringValidator blockValidator = NonEmptyStringValidator();
+  final String invalidNameErrorText = "Name can't be empty";
+  final String invalidCampusErrorText = "Campus can't be empty";
+  final String invalidBlockErrorText = "Block can't be empty";
+}
