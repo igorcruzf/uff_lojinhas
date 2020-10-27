@@ -1,7 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:uff_lojinhas/services/auth.dart';
 import 'validators.dart';
 
 
@@ -35,22 +35,26 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
     setState(() {});
   }
 
-  /*void _submit() async {
+  void _submit() async {
     setState(() {
       _submitted = true;
       _isLoading = true;
     });
     try {
-      final auth = Provider.of<AuthBase>(context, listen: false);
-      await auth.createUserWithEmailAndPassword(_email, _password);
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
+      CollectionReference shop = Firestore.instance.collection('lojas');
+      shop.add({"idOwner": "123",
+                "name": _name,
+                "campus": _campus,
+                "block": _block,
+                "floor": _floor,
+                "urlPhoto": _urlPhoto});
+      
     } finally {
       setState(() {
         _isLoading = false;
       });
     }
-  }*/
+  }
 
   TextField _nameTextField() {
     bool showErrorText = !widget.nameValidator.isValid(_name) && _submitted;
@@ -73,7 +77,6 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
     return TextField(
       focusNode: _campusFocusNode,
       controller: _campusController,
-      obscureText: true,
       onChanged: (campus) => _updateState(),
       decoration: InputDecoration(
         labelText: "Campus",
@@ -87,7 +90,6 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
     return TextField(
       focusNode: _blockFocusNode,
       controller: _blockController,
-      obscureText: true,
       onChanged: (block) => _updateState(),
       decoration: InputDecoration(
         labelText: "Block",
@@ -100,7 +102,6 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
     return TextField(
       focusNode: _floorFocusNode,
       controller: _floorController,
-      obscureText: true,
       onChanged: (floor) => _updateState(),
       decoration: InputDecoration(
         labelText: "Floor",
@@ -112,7 +113,6 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
     return TextField(
       focusNode: _urlPhotoFocusNode,
       controller: _urlPhotoController,
-      obscureText: true,
       onChanged: (urlPhoto) => _updateState(),
       decoration: InputDecoration(
         labelText: "Url of a image",
@@ -134,7 +134,7 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
       _urlPhotoTextField(),
       SizedBox(height: 32),
       RaisedButton(
-        onPressed: submitEnabled ? null : null,
+        onPressed: submitEnabled ? _submit : null,
         child: Text("Create shop"),
       ),
     ];

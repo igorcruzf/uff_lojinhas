@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uff_lojinhas/services/auth.dart';
 import 'email_form_login.dart';
+import 'shop_form_register.dart';
 import 'validators.dart';
 
 
@@ -35,8 +36,12 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
     try {
       final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.createUserWithEmailAndPassword(_email, _password);
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
+      Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        fullscreenDialog: false,
+        builder: (context) => ShopFormRegister(),
+      ),
+    );
     } finally {
       setState(() {
         _isLoading = false;
