@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uff_lojinhas/services/auth.dart';
-import 'email_form_login.dart';
 import 'shop_form_register.dart';
 import 'validators.dart';
 

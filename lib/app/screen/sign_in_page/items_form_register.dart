@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'validators.dart';
 
-class ItemFormRegister extends StatefulWidget with ItemFieldsValidators {
+class ItemsFormRegister extends StatefulWidget with ItemsFieldsValidators {
   @override
-  _ItemFormRegisterState createState() => _ItemFormRegisterState();
+  _ItemsFormRegisterState createState() => _ItemsFormRegisterState();
 }
 
-class _ItemFormRegisterState extends State<ItemFormRegister> {
+class _ItemsFormRegisterState extends State<ItemsFormRegister> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _urlPhotoController = TextEditingController();

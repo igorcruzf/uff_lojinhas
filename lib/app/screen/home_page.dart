@@ -26,7 +26,7 @@ class _State extends State<HomePage> {
 
   //Acesso ao banco de dados
   Stream<QuerySnapshot> _getShops() {
-    final stream = db.collection("lojas").snapshots();
+    final stream = db.collection("shops").snapshots();
 
     stream.listen((dados) {
       _controller.add(dados);

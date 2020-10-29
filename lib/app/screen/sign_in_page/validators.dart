@@ -26,7 +26,7 @@ class ShopFieldsValidators {
 }
 
 
-class ItemFieldsValidators {
+class ItemsFieldsValidators {
   final StringValidator nameValidator = NonEmptyStringValidator();
   final StringValidator priceValidator = NonEmptyStringValidator();
   final String invalidNameErrorText = "Name can't be empty";
