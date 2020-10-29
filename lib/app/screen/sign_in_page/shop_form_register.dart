@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'validators.dart';
-
 
 class ShopFormRegister extends StatefulWidget with ShopFieldsValidators {
   @override
@@ -31,9 +30,12 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
   bool _isLoading = false;
 
   _updateState() {
-    print("name $_name, campus: $_campus,block: $_block,floor: $_floor, urlPhoto: $_urlPhoto");
+    print(
+        "name $_name, campus: $_campus,block: $_block,floor: $_floor, urlPhoto: $_urlPhoto");
     setState(() {});
   }
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   void _submit() async {
     setState(() {
@@ -41,14 +43,16 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
       _isLoading = true;
     });
     try {
+      final FirebaseUser user = await auth.currentUser();
       CollectionReference shop = Firestore.instance.collection('lojas');
-      shop.add({"idOwner": "123",
-                "name": _name,
-                "campus": _campus,
-                "block": _block,
-                "floor": _floor,
-                "urlPhoto": _urlPhoto});
-      
+      shop.add({
+        "idOwner": user.uid,
+        "name": _name,
+        "campus": _campus,
+        "block": _block,
+        "floor": _floor,
+        "urlPhoto": _urlPhoto
+      });
     } finally {
       setState(() {
         _isLoading = false;
@@ -63,12 +67,11 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
       keyboardType: TextInputType.name,
       controller: _nameController,
       onChanged: (name) => _updateState(),
-      decoration:
-        InputDecoration(
-          labelText: "Name",
-          hintText: "Name of your shop",
-          errorText: showErrorText ? widget.invalidNameErrorText : null,
-          ),
+      decoration: InputDecoration(
+        labelText: "Name",
+        hintText: "Name of your shop",
+        errorText: showErrorText ? widget.invalidNameErrorText : null,
+      ),
     );
   }
 
@@ -121,7 +124,9 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
   }
 
   List<Widget> _buildChildren() {
-    bool submitEnabled = widget.nameValidator.isValid(_name) && widget.campusValidator.isValid(_campus) && widget.blockValidator.isValid(_block);
+    bool submitEnabled = widget.nameValidator.isValid(_name) &&
+        widget.campusValidator.isValid(_campus) &&
+        widget.blockValidator.isValid(_block);
     return [
       _nameTextField(),
       SizedBox(height: 16),
@@ -158,8 +163,7 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.min,
                   children: _buildChildren(),
-                )
-            ),
+                )),
           ),
         ),
       ),
