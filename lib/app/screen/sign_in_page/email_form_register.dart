@@ -37,11 +37,11 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
       final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.createUserWithEmailAndPassword(_email, _password);
       Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        fullscreenDialog: false,
-        builder: (context) => ShopFormRegister(),
-      ),
-    );
+        MaterialPageRoute<void>(
+          fullscreenDialog: false,
+          builder: (context) => ShopFormRegister(),
+        ),
+      );
     } finally {
       setState(() {
         _isLoading = false;

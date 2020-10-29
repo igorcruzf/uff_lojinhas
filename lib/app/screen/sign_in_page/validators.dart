@@ -24,3 +24,11 @@ class ShopFieldsValidators {
   final String invalidCampusErrorText = "Campus can't be empty";
   final String invalidBlockErrorText = "Block can't be empty";
 }
+
+
+class ItemFieldsValidators {
+  final StringValidator nameValidator = NonEmptyStringValidator();
+  final StringValidator priceValidator = NonEmptyStringValidator();
+  final String invalidNameErrorText = "Name can't be empty";
+  final String invalidPriceErrorText = "Price can't be empty";
+}

@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Item {
 
   String _idOwner;
-  String _idItem;
   String _name;
   String _price;
   String _urlPhoto;
@@ -25,7 +24,6 @@ class Item {
       "name"            : this.name,
       "urlPhoto"        : this.urlPhoto,
       "price"           : this.price,
-      "idItem"          : this.idItem,
     };
 
     return map;
@@ -39,11 +37,6 @@ class Item {
     _idOwner = value;
   }
 
-  String get idItem => _idItem;
-
-  set idItem(String value) {
-    _idItem = value;
-  }
 
   String get price => _price;
 

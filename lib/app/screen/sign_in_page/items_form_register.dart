@@ -2,37 +2,30 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'items_form_register.dart';
 import 'validators.dart';
 
-class ShopFormRegister extends StatefulWidget with ShopFieldsValidators {
+class ItemFormRegister extends StatefulWidget with ItemFieldsValidators {
   @override
-  _ShopFormRegisterState createState() => _ShopFormRegisterState();
+  _ItemFormRegisterState createState() => _ItemFormRegisterState();
 }
 
-class _ShopFormRegisterState extends State<ShopFormRegister> {
+class _ItemFormRegisterState extends State<ItemFormRegister> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _campusController = TextEditingController();
-  final TextEditingController _blockController = TextEditingController();
-  final TextEditingController _floorController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
   final TextEditingController _urlPhotoController = TextEditingController();
   final FocusNode _nameFocusNode = FocusNode();
-  final FocusNode _campusFocusNode = FocusNode();
-  final FocusNode _blockFocusNode = FocusNode();
-  final FocusNode _floorFocusNode = FocusNode();
+  final FocusNode _priceFocusNode = FocusNode();
   final FocusNode _urlPhotoFocusNode = FocusNode();
 
   String get _name => _nameController.text;
-  String get _campus => _campusController.text;
-  String get _block => _blockController.text;
-  String get _floor => _floorController.text;
+  String get _price => _priceController.text;
   String get _urlPhoto => _urlPhotoController.text;
   bool _submitted = false;
   bool _isLoading = false;
+  bool _finish = false;
 
   _updateState() {
-    print(
-        "name $_name, campus: $_campus,block: $_block,floor: $_floor, urlPhoto: $_urlPhoto");
+    print("name $_name, price: $_price, urlPhoto: $_urlPhoto");
     setState(() {});
   }
 
@@ -45,21 +38,13 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
     });
     try {
       final FirebaseUser user = await auth.currentUser();
-      CollectionReference shop = Firestore.instance.collection('shops');
-      shop.add({
+      CollectionReference item = Firestore.instance.collection('items');
+      item.add({
         "idOwner": user.uid,
         "name": _name,
-        "campus": _campus,
-        "block": _block,
-        "floor": _floor,
+        "price": _price,
         "urlPhoto": _urlPhoto
       });
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          fullscreenDialog: false,
-          builder: (context) => ItemsFormRegister(),
-        ),
-      );
     } finally {
       setState(() {
         _isLoading = false;
@@ -76,45 +61,21 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
       onChanged: (name) => _updateState(),
       decoration: InputDecoration(
         labelText: "Name",
-        hintText: "Name of your shop",
+        hintText: "Name of your item",
         errorText: showErrorText ? widget.invalidNameErrorText : null,
       ),
     );
   }
 
-  TextField _campusTextField() {
-    bool showErrorText = _submitted && !widget.campusValidator.isValid(_campus);
+  TextField _priceTextField() {
+    bool showErrorText = _submitted && !widget.priceValidator.isValid(_price);
     return TextField(
-      focusNode: _campusFocusNode,
-      controller: _campusController,
-      onChanged: (campus) => _updateState(),
+      focusNode: _priceFocusNode,
+      controller: _priceController,
+      onChanged: (price) => _updateState(),
       decoration: InputDecoration(
-        labelText: "Campus",
-        errorText: showErrorText ? widget.invalidCampusErrorText : null,
-      ),
-    );
-  }
-
-  TextField _blockTextField() {
-    bool showErrorText = _submitted && !widget.blockValidator.isValid(_block);
-    return TextField(
-      focusNode: _blockFocusNode,
-      controller: _blockController,
-      onChanged: (block) => _updateState(),
-      decoration: InputDecoration(
-        labelText: "Block",
-        errorText: showErrorText ? widget.invalidBlockErrorText : null,
-      ),
-    );
-  }
-
-  TextField _floorTextField() {
-    return TextField(
-      focusNode: _floorFocusNode,
-      controller: _floorController,
-      onChanged: (floor) => _updateState(),
-      decoration: InputDecoration(
-        labelText: "Floor",
+        labelText: "Price",
+        errorText: showErrorText ? widget.invalidPriceErrorText : null,
       ),
     );
   }
@@ -132,22 +93,21 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
 
   List<Widget> _buildChildren() {
     bool submitEnabled = widget.nameValidator.isValid(_name) &&
-        widget.campusValidator.isValid(_campus) &&
-        widget.blockValidator.isValid(_block);
+        widget.priceValidator.isValid(_price);
     return [
       _nameTextField(),
       SizedBox(height: 16),
-      _campusTextField(),
-      SizedBox(height: 32),
-      _blockTextField(),
-      SizedBox(height: 32),
-      _floorTextField(),
+      _priceTextField(),
       SizedBox(height: 32),
       _urlPhotoTextField(),
       SizedBox(height: 32),
       RaisedButton(
         onPressed: submitEnabled ? _submit : null,
-        child: Text("Create shop"),
+        child: Text("Create more items"),
+      ),
+      RaisedButton(
+        onPressed: submitEnabled ? _submit : null,
+        child: Text("Finish registration"),
       ),
     ];
   }
