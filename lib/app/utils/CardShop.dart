@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-
 import '../model/Shop.dart';
+import '../screen/show_shop_page.dart';
 
 // ignore: must_be_immutable
 class CardShop extends StatelessWidget {
@@ -13,7 +13,11 @@ class CardShop extends StatelessWidget {
   Widget build(BuildContext context) {
     return new InkWell(
         onTap: () {
-          print("Card " + shop.idOwner);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                fullscreenDialog: false, builder: (context) => ShowShopPage(loja: shop)),
+          );
         },
         child: new Container(
             width: 400.0,
@@ -26,7 +30,7 @@ class CardShop extends StatelessWidget {
                       width: 400.0,
                       height: 200.0,
                       child:
-                      new Image.network(shop.urlPhoto, fit: BoxFit.cover)),
+                          new Image.network(shop.urlPhoto, fit: BoxFit.cover)),
                   new Padding(
                       padding: new EdgeInsets.all(10.0),
                       child: new Row(

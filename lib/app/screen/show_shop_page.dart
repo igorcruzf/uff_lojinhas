@@ -2,59 +2,49 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:uff_lojinhas/services/auth.dart';
-
-import '../utils/CardShop.dart';
+import '../utils/CardItem.dart';
 import '../model/Shop.dart';
+import '../model/Item.dart';
 
-class HomePage extends StatefulWidget {
-  @override
+class ShowShopPage extends StatefulWidget {
+  final Shop loja;
+  ShowShopPage({this.loja});
   _State createState() => _State();
 }
 
-class _State extends State<HomePage> {
-
+class _State extends State<ShowShopPage> {
   final _controller = StreamController<QuerySnapshot>.broadcast();
   Firestore db = Firestore.instance;
 
   @override
   void initState() {
-    _getShops();
+    _getItems();
     super.initState();
   }
 
   //Acesso ao banco de dados
-  Stream<QuerySnapshot> _getShops() {
-    final stream = db.collection("shops").snapshots();
+  void _getItems() {
+    final stream = db
+        .collection("items")
+        .where("idOwner", isEqualTo: widget.loja.idOwner)
+        .snapshots();
 
     stream.listen((dados) {
       _controller.add(dados);
     });
   }
 
-  List<Widget> createCardList(List<DocumentSnapshot> list){
-
+  List<Widget> createCardList(List<DocumentSnapshot> list) {
     List cardList = new List<Widget>();
 
-    list.forEach((shop) => cardList.add(new CardShop(Shop.mapToShop(shop.data)))); //Cria um card por loja
+    list.forEach((item) => cardList
+        .add(new CardItem(Item.mapToItem(item.data)))); //Cria um card por item
 
     return cardList;
   }
 
-  //Função para deslogar
-  Future<void> _signOut(BuildContext context) async {
-    try {
-      final auth = Provider.of<AuthBase>(context, listen: false);
-      await auth.signOut();
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-
     return StreamBuilder<QuerySnapshot>(
         stream: _controller.stream,
         // ignore: missing_return
@@ -65,8 +55,8 @@ class _State extends State<HomePage> {
               return Center(
                 child: Column(
                   children: <Widget>[
-                    Text("Carregando lojas"),
-                     CircularProgressIndicator()
+                    Text("Carregando loja"),
+                    CircularProgressIndicator()
                   ],
                 ),
               );
@@ -81,7 +71,7 @@ class _State extends State<HomePage> {
                 if (querySnapshot.documents.length == 0) {
                   return Center(
                     child: Text(
-                      "Nenhuma lojinha cadastrada ainda :( " +
+                      "A loja não tem itens" +
                           querySnapshot.documents.length.toString(),
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -89,24 +79,28 @@ class _State extends State<HomePage> {
                   );
                 }
                 return Scaffold(
-                    appBar: AppBar(
-                        title: Text("Lojinhas da UFF(feed)"),
-                        backgroundColor: Colors.indigo,
-                        actions: <Widget>[
-                          FlatButton(
-                              onPressed: () => _signOut(context),
-                              child: Text(
-                                "Logout",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12,
-                                    color: Colors.white),
-                              ))
-                        ]),
-                    body: new Container(
+                  appBar: AppBar(
+                    title: Text(widget.loja.name),
+                    backgroundColor: Colors.indigo,
+                    /*actions: <Widget>[
+                        FlatButton(
+                            onPressed: () => _goToFeed(context),
+                            child: Text(
+                              "Voltar para o feed",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  color: Colors.white),
+                            ))
+                      ]*/
+                  ),
+                  body: new Container(
                         child: new ListView(
-                      children: createCardList(querySnapshot.documents.toList()), // Aqui que efetivamente é chamado os cards
-                    )));
+                          children: createCardList(querySnapshot.documents
+                              .toList()), // Aqui que efetivamente é chamado os cards
+                        ) 
+                      )
+                );
               }
           }
         });

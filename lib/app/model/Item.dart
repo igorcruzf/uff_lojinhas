@@ -9,6 +9,15 @@ class Item {
 
   Item();
 
+  static Item mapToItem(Map<String, dynamic> data){
+    Item item = new Item();
+    item.idOwner = data["idOwner"];
+    item.name = data["name"];
+    item.price = data["price"];
+    item.urlPhoto =  data.containsKey("urlPhoto")? data["urlPhoto"] : "https://www.milliescookies.com/tco-images/unsafe/fit-in/769x386/center/middle/smart/filters:upscale():fill(white):sharpen(0.5,0.5,true)/https://www.milliescookies.com/static/uploads/2017/04/page-not-found.jpg";
+    return item;
+  }
+
   save() async {
     Firestore db = Firestore.instance;
 
