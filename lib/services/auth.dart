@@ -19,6 +19,16 @@ abstract class AuthBase {
 class Auth implements AuthBase {
 
   final _firebaseAuth = FirebaseAuth.instance;
+  static var _email = "";
+
+  setEmail(email){
+    _email = email;
+  }
+
+  // Auth.getEmail() em qualquer parte do programa retorna ou email ou vazio se logado anonimo
+  static getEmail(){
+    return _email;
+  }
 
   User _userFromFirebase(FirebaseUser user) {
     if (user == null) {
@@ -40,6 +50,7 @@ class Auth implements AuthBase {
   @override
   Future<User> signInAnonymously() async {
     final authResult = await _firebaseAuth.signInAnonymously();
+    setEmail("");
     return _userFromFirebase(authResult.user);
   }
 
@@ -52,6 +63,7 @@ class Auth implements AuthBase {
   @override
   Future<User> signInWithEmailAndPassword(String email, String password) async{
     final authResult = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+    setEmail(email);
     return _userFromFirebase(authResult.user);
   }
 
