@@ -2,44 +2,66 @@ import 'package:flutter/material.dart';
 import 'account_edit.dart';
 import 'items_edit.dart';
 import 'shop_edit.dart';
+import 'items_register.dart';
+import "../home_page.dart";
 
 class HomeEditPage extends StatelessWidget {
+  void _toHome(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+          fullscreenDialog: false, builder: (context) => HomePage()),
+    );
+  }
 
   void _editAccount(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        fullscreenDialog: false,
-        builder: (context) => AccountEditPage()),
+          fullscreenDialog: false, builder: (context) => AccountEditPage()),
     );
   }
 
   void _editShop(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        fullscreenDialog: false,
-        builder: (context) => ShopEditPage()),
-      );
+          fullscreenDialog: false, builder: (context) => ShopEditPage()),
+    );
   }
 
   void _editItems(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        fullscreenDialog: false,
-        builder: (context) => ItemsEditPage()),
-      );
+          fullscreenDialog: false, builder: (context) => ItemsEditPage()),
+    );
+  }
+
+  void _registerItems(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+          fullscreenDialog: false, builder: (context) => ItemsRegisterPage()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Página de edição")),
+        appBar: AppBar(title: Text("Página de edição"), actions: <Widget>[
+          FlatButton(
+              onPressed: () => _toHome(context),
+              child: Text(
+                "Home",
+                style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 12,
+                    color: Colors.white),
+              ))
+        ]),
         body: Padding(
             padding: EdgeInsets.all(30),
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 330),
+                  SizedBox(height: 200),
                   RaisedButton(
                     onPressed: () => _editShop(context),
                     child: Text("Editar sua loja"),
@@ -48,6 +70,11 @@ class HomeEditPage extends StatelessWidget {
                   RaisedButton(
                     onPressed: () => _editItems(context),
                     child: Text("Editar seus produtos"),
+                  ),
+                  SizedBox(height: 16),
+                  RaisedButton(
+                    onPressed: () => _registerItems(context),
+                    child: Text("Registrar mais produtos"),
                   )
                 ])));
   }
