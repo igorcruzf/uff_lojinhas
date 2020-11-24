@@ -20,7 +20,7 @@ class _State extends State<HomePage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   Firestore db = Firestore.instance;
 
-  bool loged = false;
+  bool logged = false;
   
 
   @override
@@ -31,7 +31,7 @@ class _State extends State<HomePage> {
   }
 
   //Acesso ao banco de dados
-  Stream<QuerySnapshot> _getShops(campusFilter) {
+  void _getShops(campusFilter) {
     var stream;
     if (campusFilter == "Todos") {
       stream = db.collection("shops").snapshots();
@@ -49,7 +49,7 @@ class _State extends State<HomePage> {
   void _getProvider()async{
     final FirebaseUser user = await auth.currentUser();
     if(user.providerData[0].providerId == "password" || user.providerData[1].providerId == "password"){
-      loged = true;
+      logged = true;
     }
   }
 
@@ -140,6 +140,7 @@ class _State extends State<HomePage> {
                                     fontSize: 12,
                                     color: Colors.white),
                               )),
+                            if(logged)
                             FlatButton(
                               onPressed: () => _edit(context),
                               child: Text(
