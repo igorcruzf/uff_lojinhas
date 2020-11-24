@@ -47,7 +47,7 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Lojinhas da UFF(signInPage)")
+        title: Text("Lojinhas da UFF")
       ),
       body: Padding(
         padding: EdgeInsets.all(30),
@@ -63,7 +63,7 @@ class _SignInPageState extends State<SignInPage> {
               SizedBox(height: 16),
               RaisedButton(
                 onPressed: _isLoading ? null : () => _signInWithEmail(context),
-                child: Text("Entrar como (Lojista??)"),
+                child: Text("Entrar como vendedor"),
               )
             ]
         )

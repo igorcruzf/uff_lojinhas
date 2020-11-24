@@ -81,8 +81,8 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
       controller: _nameController,
       onChanged: (name) => _updateState(),
       decoration: InputDecoration(
-        labelText: "Name",
-        hintText: "Name of your shop",
+        labelText: "Nome",
+        hintText: "Nome da sua loja",
         errorText: showErrorText ? widget.invalidNameErrorText : null,
       ),
     );
@@ -131,7 +131,7 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
       controller: _blockController,
       onChanged: (block) => _updateState(),
       decoration: InputDecoration(
-        labelText: "Block",
+        labelText: "Bloco",
         errorText: showErrorText ? widget.invalidBlockErrorText : null,
       ),
     );
@@ -143,7 +143,7 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
       controller: _floorController,
       onChanged: (floor) => _updateState(),
       decoration: InputDecoration(
-        labelText: "Floor",
+        labelText: "Andar",
       ),
     );
   }
@@ -154,7 +154,7 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
       controller: _urlPhotoController,
       onChanged: (urlPhoto) => _updateState(),
       decoration: InputDecoration(
-        labelText: "Url of a image",
+        labelText: "Url da imagem",
       ),
     );
   }
@@ -176,7 +176,7 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
       SizedBox(height: 32),
       RaisedButton(
         onPressed: submitEnabled ? _submit : null,
-        child: Text("Create shop"),
+        child: Text("Criar loja"),
       ),
     ];
   }
@@ -185,7 +185,7 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Registro da loja"),
+        title: Text("Cadastro da loja"),
         //elevation: 10,
       ),
       body: SingleChildScrollView(

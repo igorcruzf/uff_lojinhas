@@ -113,7 +113,7 @@ class _State extends State<ItemsEditPage> {
                 }
                 return Scaffold(
                     appBar: AppBar(
-                      title: Text(loja.name),
+                      title: Text("Escolha o item a editar"),
                       backgroundColor: Colors.indigo,
                     ),
                     body: new Container(

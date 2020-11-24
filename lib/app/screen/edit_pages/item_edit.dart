@@ -79,26 +79,6 @@ class _ItemEditPageState extends State<ItemEditPage> {
     }
   }
 
-  void _submitMore() async {
-    _submit();
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        fullscreenDialog: false,
-        builder: (context) => ItemsEditPage(),
-      ),
-    );
-  }
-
-  void _submitFinal() async {
-    _submit();
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        fullscreenDialog: false,
-        builder: (context) => HomePage(),
-      ),
-    );
-  }
-
   TextField _nameTextField() {
     bool showErrorText = !widget.nameValidator.isValid(_name) && _submitted;
     return TextField(
@@ -149,7 +129,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
       _urlPhotoTextField(),
       SizedBox(height: 32),
       RaisedButton(
-        onPressed: submitEnabled ? _submitFinal : null,
+        onPressed: submitEnabled ? _submit : null,
         child: Text("Atualizar item"),
       ),
     ];
@@ -159,7 +139,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Atualização do item $widget.produto.name "),
+        title: Text("Atualização do item"),
         //elevation: 10,
       ),
       body: SingleChildScrollView(

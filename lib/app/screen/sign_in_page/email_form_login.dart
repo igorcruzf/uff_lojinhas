@@ -61,7 +61,7 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
       onChanged: (email) => _updateState(),
       decoration: InputDecoration(
         labelText: "Email",
-        hintText: "youremail@gmail.com",
+        hintText: "seuremail@gmail.com",
         errorText: showErrorText ? widget.invalidEmailErrorText : null,
       ),
     );
@@ -77,7 +77,7 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
       onChanged: (password) => _updateState(),
       decoration: InputDecoration(
         enabled: !_isLoading,
-        labelText: "Password",
+        labelText: "Senha",
         errorText: showErrorText ? widget.invalidPasswordErrorText : null,
       ),
     );
@@ -93,11 +93,11 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
       SizedBox(height: 32),
       RaisedButton(
         onPressed: submitEnabled ? _submit : null,
-        child: Text("Submit Login"),
+        child: Text("Logar"),
       ),
       RaisedButton(
         onPressed: () => _registerWithEmail(context),
-        child: Text("Register NOW")
+        child: Text("Cadastre-se")
       )
     ];
   }

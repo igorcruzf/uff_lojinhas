@@ -41,11 +41,6 @@ class HomeEditPage extends StatelessWidget {
                 children: [
                   SizedBox(height: 330),
                   RaisedButton(
-                    onPressed: () => _editAccount(context),
-                    child: Text("Editar sua conta(???)"),
-                  ),
-                  SizedBox(height: 16),
-                  RaisedButton(
                     onPressed: () => _editShop(context),
                     child: Text("Editar sua loja"),
                   ),

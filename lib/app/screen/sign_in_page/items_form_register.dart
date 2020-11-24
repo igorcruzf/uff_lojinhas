@@ -80,8 +80,8 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
       controller: _nameController,
       onChanged: (name) => _updateState(),
       decoration: InputDecoration(
-        labelText: "Name",
-        hintText: "Name of your item",
+        labelText: "Nome",
+        hintText: "Nome do seu item",
         errorText: showErrorText ? widget.invalidNameErrorText : null,
       ),
     );
@@ -94,7 +94,7 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
       controller: _priceController,
       onChanged: (price) => _updateState(),
       decoration: InputDecoration(
-        labelText: "Price",
+        labelText: "Preço",
         errorText: showErrorText ? widget.invalidPriceErrorText : null,
       ),
     );
@@ -106,7 +106,7 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
       controller: _urlPhotoController,
       onChanged: (urlPhoto) => _updateState(),
       decoration: InputDecoration(
-        labelText: "Url of a image",
+        labelText: "Url da imagem",
       ),
     );
   }
@@ -123,11 +123,11 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
       SizedBox(height: 32),
       RaisedButton(
         onPressed: submitEnabled ? _submitMore : null,
-        child: Text("Create more items"),
+        child: Text("Criar mais itens"),
       ),
       RaisedButton(
         onPressed: submitEnabled ? _submitFinal : null,
-        child: Text("Finish registration"),
+        child: Text("Finalizar cadastro"),
       ),
     ];
   }
@@ -136,7 +136,7 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Register"),
+        title: Text("Cadastro de itens"),
         //elevation: 10,
       ),
       body: SingleChildScrollView(

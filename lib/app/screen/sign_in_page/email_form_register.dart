@@ -58,7 +58,7 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
       decoration:
         InputDecoration(
           labelText: "Email",
-          hintText: "youremail@gmail.com",
+          hintText: "seuremail@gmail.com",
           errorText: showErrorText ? widget.invalidEmailErrorText : null,
           ),
     );
@@ -72,7 +72,7 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
       obscureText: true,
       onChanged: (password) => _updateState(),
       decoration: InputDecoration(
-        labelText: "Password",
+        labelText: "Senha",
         errorText: showErrorText ? widget.invalidPasswordErrorText : null,
       ),
     );
@@ -87,7 +87,7 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
       SizedBox(height: 32),
       RaisedButton(
         onPressed: submitEnabled ? _submit : null,
-        child: Text("Create account"),
+        child: Text("Criar conta"),
       ),
     ];
   }
@@ -96,7 +96,7 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Register"),
+        title: Text("Cadastro"),
         //elevation: 10,
       ),
       body: SingleChildScrollView(
