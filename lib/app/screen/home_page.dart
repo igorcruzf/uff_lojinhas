@@ -1,46 +1,57 @@
 import 'dart:async';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uff_lojinhas/app/utils/FilterButton.dart';
 import 'package:uff_lojinhas/services/auth.dart';
 
+import 'edit_pages/home_edit.dart';
 import '../utils/CardShop.dart';
 import '../model/Shop.dart';
 
-
 class HomePage extends StatefulWidget {
-
   @override
   _State createState() => _State();
 }
 
 class _State extends State<HomePage> {
-
   final _controller = StreamController<QuerySnapshot>.broadcast();
+  final FirebaseAuth auth = FirebaseAuth.instance;
   Firestore db = Firestore.instance;
+
+  bool loged = false;
+  
 
   @override
   void initState() {
     _getShops("Todos");
+    _getProvider();
     super.initState();
   }
 
   //Acesso ao banco de dados
   Stream<QuerySnapshot> _getShops(campusFilter) {
     var stream;
-    if(campusFilter=="Todos"){
+    if (campusFilter == "Todos") {
       stream = db.collection("shops").snapshots();
-    }
-    else {
-      stream = db.collection("shops").where("campus", isEqualTo: campusFilter).snapshots();
+    } else {
+      stream = db
+          .collection("shops")
+          .where("campus", isEqualTo: campusFilter)
+          .snapshots();
     }
     stream.listen((dados) {
       _controller.add(dados);
     });
   }
-  
+
+  void _getProvider()async{
+    final FirebaseUser user = await auth.currentUser();
+    if(user.providerData[0].providerId == "password" || user.providerData[1].providerId == "password"){
+      loged = true;
+    }
+  }
 
   List<Widget> createCardList(List<DocumentSnapshot> list) {
     List cardList = new List<Widget>();
@@ -48,15 +59,12 @@ class _State extends State<HomePage> {
     list.forEach((shop) => cardList
         .add(new CardShop(Shop.mapToShop(shop.data)))); //Cria um card por loja
 
-    if(cardList.isEmpty){
+    if (cardList.isEmpty) {
       cardList.add(new Text(
-          "Nenhuma lojinha encontrada =/",
-          textAlign: TextAlign.center,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 25
-          ),
+        "Nenhuma lojinha encontrada =/",
+        textAlign: TextAlign.center,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
       ));
     }
 
@@ -71,6 +79,13 @@ class _State extends State<HomePage> {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  void _edit(BuildContext context) async {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+          fullscreenDialog: false, builder: (context) => HomeEditPage()),
+    );
   }
 
   @override
@@ -92,8 +107,7 @@ class _State extends State<HomePage> {
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 25,
-                          color: Colors.white
-                      ),
+                          color: Colors.white),
                     ),
                     CircularProgressIndicator()
                   ],
@@ -107,17 +121,14 @@ class _State extends State<HomePage> {
                   "Erro ao carregar as lojinhas",
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 );
               } else {
                 QuerySnapshot querySnapshot = snapshot.data;
 
                 return Scaffold(
                     appBar: AppBar(
-                        title: Text("Lojinhas da UFF(feed)"),
+                        title: Text("Lojinhas da UFF"),
                         backgroundColor: Colors.indigo,
                         actions: <Widget>[
                           FlatButton(
@@ -128,16 +139,24 @@ class _State extends State<HomePage> {
                                     fontWeight: FontWeight.w400,
                                     fontSize: 12,
                                     color: Colors.white),
+                              )),
+                            FlatButton(
+                              onPressed: () => _edit(context),
+                              child: Text(
+                                "Editar",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 12,
+                                    color: Colors.white),
                               ))
+                          
                         ]),
                     body: new Container(
                         child: Column(
                             children: ([
-                              FilterButton(
-                                  filter: (String filter) {
-                                    setState(() => _getShops(filter));
-                                }
-                              ),
+                      FilterButton(filter: (String filter) {
+                        setState(() => _getShops(filter));
+                      }),
                       Expanded(
                           child: new ListView(
                         scrollDirection: Axis.vertical,

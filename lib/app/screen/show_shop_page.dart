@@ -84,24 +84,7 @@ class _State extends State<ShowShopPage> {
                     appBar: AppBar(
                         title: Text(widget.loja.name),
                         backgroundColor: Colors.indigo,
-                        actions: <Widget>[
-                          FlatButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        fullscreenDialog: false,
-                                        builder: (context) => HomePage())
-                                );
-                              },
-                              child: Text(
-                                "Voltar para o feed",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12,
-                                    color: Colors.white),
-                              ))
-                        ]),
+                    ),
                     body: new Container(
                         child: new Column(
                           children: <Widget>[

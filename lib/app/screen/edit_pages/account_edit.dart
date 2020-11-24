@@ -1,18 +1,24 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uff_lojinhas/services/auth.dart';
-import 'shop_form_register.dart';
 import '../../utils/validators.dart';
+import 'home_edit.dart';
 
-
-class EmailFormRegister extends StatefulWidget with EmailAndPasswordValidators {
+class AccountEditPage extends StatefulWidget with EmailAndPasswordValidators {
   @override
-  _EmailFormRegisterState createState() => _EmailFormRegisterState();
+  _AccountEditPageState createState() => _AccountEditPageState();
 }
 
-class _EmailFormRegisterState extends State<EmailFormRegister> {
-  final TextEditingController _emailController = TextEditingController();
+class _AccountEditPageState extends State<AccountEditPage> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  void initState() {
+    _getUser();
+    super.initState();
+  }
+
+  TextEditingController _emailController;
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
@@ -27,18 +33,25 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
     setState(() {});
   }
 
+  void _getUser() async {
+    final FirebaseUser user = await auth.currentUser();
+    setState(() {
+      _emailController = TextEditingController(text: user.email);
+    });
+  }
+
   void _submit() async {
     setState(() {
       _submitted = true;
       _isLoading = true;
     });
     try {
-      final auth = Provider.of<AuthBase>(context, listen: false);
-      await auth.createUserWithEmailAndPassword(_email, _password);
+      final update = Provider.of<AuthBase>(context, listen: false);
+      await update.createUserWithEmailAndPassword(_email, _password);
       Navigator.of(context).push(
         MaterialPageRoute<void>(
           fullscreenDialog: false,
-          builder: (context) => ShopFormRegister(),
+          builder: (context) => HomeEditPage(),
         ),
       );
     } finally {
@@ -55,31 +68,32 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
       keyboardType: TextInputType.emailAddress,
       controller: _emailController,
       onChanged: (email) => _updateState(),
-      decoration:
-        InputDecoration(
-          labelText: "Email",
-          hintText: "youremail@gmail.com",
-          errorText: showErrorText ? widget.invalidEmailErrorText : null,
-          ),
+      decoration: InputDecoration(
+        labelText: "Email",
+        hintText: "seuemail@gmail.com",
+        errorText: showErrorText ? widget.invalidEmailErrorText : null,
+      ),
     );
   }
 
   TextField _passwordTextField() {
-    bool showErrorText = _submitted && !widget.passwordValidator.isValid(_password);
+    bool showErrorText =
+        _submitted && !widget.passwordValidator.isValid(_password);
     return TextField(
       focusNode: _passwordFocusNode,
       controller: _passwordController,
       obscureText: true,
       onChanged: (password) => _updateState(),
       decoration: InputDecoration(
-        labelText: "Password",
+        labelText: "Senha",
         errorText: showErrorText ? widget.invalidPasswordErrorText : null,
       ),
     );
   }
 
   List<Widget> _buildChildren() {
-    bool submitEnabled = widget.emailValidator.isValid(_email) && widget.passwordValidator.isValid(_password);
+    bool submitEnabled = widget.emailValidator.isValid(_email) &&
+        widget.passwordValidator.isValid(_password);
     return [
       _emailTextField(),
       SizedBox(height: 16),
@@ -87,7 +101,7 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
       SizedBox(height: 32),
       RaisedButton(
         onPressed: submitEnabled ? _submit : null,
-        child: Text("Create account"),
+        child: Text("Atulizar conta"),
       ),
     ];
   }
@@ -96,7 +110,7 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Register"),
+        title: Text("Atualização da conta"),
         //elevation: 10,
       ),
       body: SingleChildScrollView(
@@ -110,8 +124,7 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.min,
                   children: _buildChildren(),
-                )
-            ),
+                )),
           ),
         ),
       ),

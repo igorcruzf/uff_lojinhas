@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Shop {
-
   String _idOwner;
   String _name;
   String _urlPhoto;
@@ -9,38 +8,37 @@ class Shop {
   String _block;
   String _floor;
 
-  static Shop mapToShop(Map<String, dynamic> data){
+  static Shop mapToShop(Map<String, dynamic> data) {
     Shop shop = new Shop();
     shop.idOwner = data["idOwner"];
     shop.name = data["name"];
     shop.campus = data["campus"];
     shop.block = data["block"];
     shop.floor = data["floor"];
-    shop.urlPhoto =  data.containsKey("urlPhoto") && data["urlPhoto"].toString().isNotEmpty? data["urlPhoto"] : "https://www.milliescookies.com/tco-images/unsafe/fit-in/769x386/center/middle/smart/filters:upscale():fill(white):sharpen(0.5,0.5,true)/https://www.milliescookies.com/static/uploads/2017/04/page-not-found.jpg";
+    shop.urlPhoto = data.containsKey("urlPhoto") &&
+            data["urlPhoto"].toString().isNotEmpty
+        ? data["urlPhoto"]
+        : "https://www.milliescookies.com/tco-images/unsafe/fit-in/769x386/center/middle/smart/filters:upscale():fill(white):sharpen(0.5,0.5,true)/https://www.milliescookies.com/static/uploads/2017/04/page-not-found.jpg";
     return shop;
   }
 
   save() async {
     Firestore db = Firestore.instance;
 
-    await db.collection("lojas")
-        .document( this.idOwner )
-        .setData( this.toMap() );
+    await db.collection("lojas").document(this.idOwner).setData(this.toMap());
   }
 
-  Map<String, dynamic> toMap(){
-
+  Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {
-      "idOwner"         : this.idOwner,
-      "name"            : this.name,
-      "urlPhoto"        : this.urlPhoto,
-      "campus"        : this.campus,
-      "block"        : this.block,
-      "floor"        : this.floor,
+      "idOwner": this.idOwner,
+      "name": this.name,
+      "urlPhoto": this.urlPhoto,
+      "campus": this.campus,
+      "block": this.block,
+      "floor": this.floor,
     };
 
     return map;
-
   }
 
   String get campus => _campus;

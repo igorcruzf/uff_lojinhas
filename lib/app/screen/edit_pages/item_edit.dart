@@ -2,18 +2,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../model/Item.dart';
+import '../../model/Shop.dart';
 import '../home_page.dart';
 import '../../utils/validators.dart';
+import 'items_edit.dart';
+import 'home_edit.dart';
 
-class ItemsFormRegister extends StatefulWidget with ItemsFieldsValidators {
+class ItemEditPage extends StatefulWidget with ItemsFieldsValidators {
   @override
-  _ItemsFormRegisterState createState() => _ItemsFormRegisterState();
+  final Item produto;
+  final String id;
+  ItemEditPage({this.produto, this.id});
+  _ItemEditPageState createState() => _ItemEditPageState();
 }
 
-class _ItemsFormRegisterState extends State<ItemsFormRegister> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
-  final TextEditingController _urlPhotoController = TextEditingController();
+class _ItemEditPageState extends State<ItemEditPage> {
+  TextEditingController _nameController;
+  TextEditingController _priceController;
+  TextEditingController _urlPhotoController;
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _priceFocusNode = FocusNode();
   final FocusNode _urlPhotoFocusNode = FocusNode();
@@ -24,12 +31,26 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
   bool _submitted = false;
   bool _isLoading = false;
 
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  Firestore db = Firestore.instance;
+  Shop loja;
+
+  @override
+  void initState() {
+    _getItem();
+    super.initState();
+  }
+
   _updateState() {
     print("name $_name, price: $_price, urlPhoto: $_urlPhoto");
     setState(() {});
   }
 
-  final FirebaseAuth auth = FirebaseAuth.instance;
+  void _getItem() {
+    _nameController = TextEditingController(text: widget.produto.name);
+    _priceController = TextEditingController(text: widget.produto.price);
+    _urlPhotoController = TextEditingController(text: widget.produto.urlPhoto);
+  }
 
   void _submit() async {
     setState(() {
@@ -39,12 +60,18 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
     try {
       final FirebaseUser user = await auth.currentUser();
       CollectionReference item = Firestore.instance.collection('items');
-      item.add({
-        "idOwner": user.uid,
-        "name": _name,
-        "price": _price,
-        "urlPhoto": _urlPhoto
-      });
+      item
+          .document(widget.id)
+          .updateData({"name": _name, "price": _price, "urlPhoto": _urlPhoto})
+          .then((value) => print("Item Updated"))
+          .catchError((error) => print("Failed to update item: $error"));
+
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          fullscreenDialog: false,
+          builder: (context) => HomeEditPage(),
+        ),
+      );
     } finally {
       setState(() {
         _isLoading = false;
@@ -57,7 +84,7 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         fullscreenDialog: false,
-        builder: (context) => ItemsFormRegister(),
+        builder: (context) => ItemsEditPage(),
       ),
     );
   }
@@ -80,8 +107,8 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
       controller: _nameController,
       onChanged: (name) => _updateState(),
       decoration: InputDecoration(
-        labelText: "Name",
-        hintText: "Name of your item",
+        labelText: "Nome",
+        hintText: "Nome",
         errorText: showErrorText ? widget.invalidNameErrorText : null,
       ),
     );
@@ -94,7 +121,7 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
       controller: _priceController,
       onChanged: (price) => _updateState(),
       decoration: InputDecoration(
-        labelText: "Price",
+        labelText: "Preço",
         errorText: showErrorText ? widget.invalidPriceErrorText : null,
       ),
     );
@@ -106,7 +133,7 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
       controller: _urlPhotoController,
       onChanged: (urlPhoto) => _updateState(),
       decoration: InputDecoration(
-        labelText: "Url of a image",
+        labelText: "Url da imagem",
       ),
     );
   }
@@ -122,12 +149,8 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
       _urlPhotoTextField(),
       SizedBox(height: 32),
       RaisedButton(
-        onPressed: submitEnabled ? _submitMore : null,
-        child: Text("Create more items"),
-      ),
-      RaisedButton(
         onPressed: submitEnabled ? _submitFinal : null,
-        child: Text("Finish registration"),
+        child: Text("Atualizar item"),
       ),
     ];
   }
@@ -136,7 +159,7 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Register"),
+        title: Text("Atualização do item $widget.produto.name "),
         //elevation: 10,
       ),
       body: SingleChildScrollView(

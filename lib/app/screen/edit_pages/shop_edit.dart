@@ -2,20 +2,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'items_form_register.dart';
+import 'home_edit.dart';
 import '../../utils/validators.dart';
+import '../../model/Shop.dart';
 
-class ShopFormRegister extends StatefulWidget with ShopFieldsValidators {
+class ShopEditPage extends StatefulWidget with ShopFieldsValidators {
   @override
-  _ShopFormRegisterState createState() => _ShopFormRegisterState();
+  _ShopEditPageState createState() => _ShopEditPageState();
 }
 
-class _ShopFormRegisterState extends State<ShopFormRegister> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _campusController = TextEditingController();
-  final TextEditingController _blockController = TextEditingController();
-  final TextEditingController _floorController = TextEditingController();
-  final TextEditingController _urlPhotoController = TextEditingController();
+class _ShopEditPageState extends State<ShopEditPage> {
+  TextEditingController _nameController;
+  TextEditingController _campusController;
+  TextEditingController _blockController;
+  TextEditingController _floorController;
+  TextEditingController _urlPhotoController;
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _campusFocusNode = FocusNode();
   final FocusNode _blockFocusNode = FocusNode();
@@ -29,6 +30,51 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
   String get _urlPhoto => _urlPhotoController.text;
   bool _submitted = false;
   bool _isLoading = false;
+
+  Firestore db = Firestore.instance;
+  Shop loja;
+  String id;
+
+  void initState() {
+    _getShop();
+    super.initState();
+  }
+
+  void _getShop() async {
+    final FirebaseUser user = await auth.currentUser();
+
+    List<DocumentSnapshot> templist;
+    List<Map<dynamic, dynamic>> list = new List();
+
+    CollectionReference colecao = db.collection("shops");
+    QuerySnapshot collectionSnapshot = await colecao.getDocuments();
+
+    templist = collectionSnapshot.documents;
+
+    list = templist.map((DocumentSnapshot docSnapshot) {
+      Map<String, dynamic> dado = docSnapshot.data;
+      if (dado["idOwner"] == user.uid) {
+        id = docSnapshot.documentID;
+      }
+      return dado;
+    }).toList();
+
+    list.forEach((dado) {
+      if (dado["idOwner"] == user.uid) {
+        setState(() {
+          loja = Shop.mapToShop(dado);
+        });
+      }
+    });
+
+    setState(() {
+      _nameController = TextEditingController(text: loja.name);
+      _campusController = TextEditingController(text: loja.campus);
+      _blockController = TextEditingController(text: loja.block);
+      _floorController = TextEditingController(text: loja.floor);
+      _urlPhotoController = TextEditingController(text: loja.urlPhoto);
+    });
+  }
 
   _updateState() {
     print(
@@ -44,20 +90,17 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
       _isLoading = true;
     });
     try {
-      final FirebaseUser user = await auth.currentUser();
       CollectionReference shop = Firestore.instance.collection('shops');
-      shop.add({
-        "idOwner": user.uid,
-        "name": _name,
-        "campus": _campus,
-        "block": _block,
-        "floor": _floor,
-        "urlPhoto": _urlPhoto
-      });
+      shop
+          .document(id)
+          .updateData({"name": _name, "campus": _campus, "block": _block, "floor": _floor, "urlPhoto": _urlPhoto})
+          .then((value) => print("Shop Updated"))
+          .catchError((error) => print("Failed to update shop: $error"));
+
       Navigator.of(context).push(
         MaterialPageRoute<void>(
           fullscreenDialog: false,
-          builder: (context) => ItemsFormRegister(),
+          builder: (context) => HomeEditPage(),
         ),
       );
     } finally {
@@ -147,7 +190,7 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
       SizedBox(height: 32),
       RaisedButton(
         onPressed: submitEnabled ? _submit : null,
-        child: Text("Create shop"),
+        child: Text("Atualizar loja"),
       ),
     ];
   }
@@ -156,7 +199,7 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Register"),
+        title: Text("Atualização da loja"),
         //elevation: 10,
       ),
       body: SingleChildScrollView(
