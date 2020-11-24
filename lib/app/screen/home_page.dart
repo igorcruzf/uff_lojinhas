@@ -155,9 +155,20 @@ class _State extends State<HomePage> {
                     body: new Container(
                         child: Column(
                             children: ([
-                      FilterButton(filter: (String filter) {
-                        setState(() => _getShops(filter));
-                      }),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children:[
+                          Text("Filtro por campus:",
+                          style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15,
+                                    color: Colors.black),),
+                          FilterButton(filter: (String filter) {
+                            setState(() => _getShops(filter));
+                          }),
+                        ]
+                      ),
+                      
                       Expanded(
                           child: new ListView(
                         scrollDirection: Axis.vertical,

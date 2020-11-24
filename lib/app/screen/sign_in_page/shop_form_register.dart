@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,18 +13,16 @@ class ShopFormRegister extends StatefulWidget with ShopFieldsValidators {
 
 class _ShopFormRegisterState extends State<ShopFormRegister> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _campusController = TextEditingController();
   final TextEditingController _blockController = TextEditingController();
   final TextEditingController _floorController = TextEditingController();
   final TextEditingController _urlPhotoController = TextEditingController();
   final FocusNode _nameFocusNode = FocusNode();
-  final FocusNode _campusFocusNode = FocusNode();
   final FocusNode _blockFocusNode = FocusNode();
   final FocusNode _floorFocusNode = FocusNode();
   final FocusNode _urlPhotoFocusNode = FocusNode();
 
   String get _name => _nameController.text;
-  String get _campus => _campusController.text;
+  String _campus;
   String get _block => _blockController.text;
   String get _floor => _floorController.text;
   String get _urlPhoto => _urlPhotoController.text;
@@ -37,6 +36,13 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
   }
 
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final Firestore db = Firestore.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _campus = '';
+  }
 
   void _submit() async {
     setState(() {
@@ -82,15 +88,38 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
     );
   }
 
-  TextField _campusTextField() {
-    bool showErrorText = _submitted && !widget.campusValidator.isValid(_campus);
-    return TextField(
-      focusNode: _campusFocusNode,
-      controller: _campusController,
-      onChanged: (campus) => _updateState(),
-      decoration: InputDecoration(
-        labelText: "Campus",
-        errorText: showErrorText ? widget.invalidCampusErrorText : null,
+  Container _campusTextField() {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: DropDownFormField(
+        titleText: 'Campus',
+        hintText: 'Selecione um campus',
+        value: _campus,
+        onChanged: (value) {
+          setState(() {
+            _campus = value;
+          });
+        },
+        dataSource: [
+          {
+            "display": "Praia Vermelha",
+            "value": "Praia Vermelha",
+          },
+          {
+            "display": "Gragoatá",
+            "value": "Gragoatá",
+          },
+          {
+            "display": "Valonguinho",
+            "value": "Valonguinho",
+          },
+          {
+            "display": "Direito",
+            "value": "Direito",
+          },
+        ],
+        textField: 'display',
+        valueField: 'value',
       ),
     );
   }
@@ -156,7 +185,7 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Register"),
+        title: Text("Registro da loja"),
         //elevation: 10,
       ),
       body: SingleChildScrollView(

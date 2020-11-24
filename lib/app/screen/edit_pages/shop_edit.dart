@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,18 +14,16 @@ class ShopEditPage extends StatefulWidget with ShopFieldsValidators {
 
 class _ShopEditPageState extends State<ShopEditPage> {
   TextEditingController _nameController;
-  TextEditingController _campusController;
   TextEditingController _blockController;
   TextEditingController _floorController;
   TextEditingController _urlPhotoController;
   final FocusNode _nameFocusNode = FocusNode();
-  final FocusNode _campusFocusNode = FocusNode();
   final FocusNode _blockFocusNode = FocusNode();
   final FocusNode _floorFocusNode = FocusNode();
   final FocusNode _urlPhotoFocusNode = FocusNode();
 
   String get _name => _nameController.text;
-  String get _campus => _campusController.text;
+  String _campus;
   String get _block => _blockController.text;
   String get _floor => _floorController.text;
   String get _urlPhoto => _urlPhotoController.text;
@@ -69,7 +68,7 @@ class _ShopEditPageState extends State<ShopEditPage> {
 
     setState(() {
       _nameController = TextEditingController(text: loja.name);
-      _campusController = TextEditingController(text: loja.campus);
+      _campus = loja.campus;
       _blockController = TextEditingController(text: loja.block);
       _floorController = TextEditingController(text: loja.floor);
       _urlPhotoController = TextEditingController(text: loja.urlPhoto);
@@ -93,7 +92,13 @@ class _ShopEditPageState extends State<ShopEditPage> {
       CollectionReference shop = Firestore.instance.collection('shops');
       shop
           .document(id)
-          .updateData({"name": _name, "campus": _campus, "block": _block, "floor": _floor, "urlPhoto": _urlPhoto})
+          .updateData({
+            "name": _name,
+            "campus": _campus,
+            "block": _block,
+            "floor": _floor,
+            "urlPhoto": _urlPhoto
+          })
           .then((value) => print("Shop Updated"))
           .catchError((error) => print("Failed to update shop: $error"));
 
@@ -125,15 +130,38 @@ class _ShopEditPageState extends State<ShopEditPage> {
     );
   }
 
-  TextField _campusTextField() {
-    bool showErrorText = _submitted && !widget.campusValidator.isValid(_campus);
-    return TextField(
-      focusNode: _campusFocusNode,
-      controller: _campusController,
-      onChanged: (campus) => _updateState(),
-      decoration: InputDecoration(
-        labelText: "Campus",
-        errorText: showErrorText ? widget.invalidCampusErrorText : null,
+  Container _campusTextField() {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: DropDownFormField(
+        titleText: 'Campus',
+        hintText: 'Selecione um campus',
+        value: _campus,
+        onChanged: (value) {
+          setState(() {
+            _campus = value;
+          });
+        },
+        dataSource: [
+          {
+            "display": "Praia Vermelha",
+            "value": "Praia Vermelha",
+          },
+          {
+            "display": "Gragoatá",
+            "value": "Gragoatá",
+          },
+          {
+            "display": "Valonguinho",
+            "value": "Valonguinho",
+          },
+          {
+            "display": "Direito",
+            "value": "Direito",
+          },
+        ],
+        textField: 'display',
+        valueField: 'value',
       ),
     );
   }
