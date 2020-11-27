@@ -1,9 +1,6 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:uff_lojinhas/app/screen/home_page.dart';
-import 'home_page.dart';
 import '../utils/CardItem.dart';
 import '../model/Shop.dart';
 import '../model/Item.dart';
@@ -73,8 +70,7 @@ class _State extends State<ShowShopPage> {
                 if (querySnapshot.documents.length == 0) {
                   return Center(
                     child: Text(
-                      "A loja não tem itens" +
-                          querySnapshot.documents.length.toString(),
+                      "A loja não tem itens",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
@@ -102,21 +98,21 @@ class _State extends State<ShowShopPage> {
                           new Padding(
                             padding: new EdgeInsets.all(10.0),
                             child: new Text(
-                              "Campus: "+widget.loja.campus,
+                              widget.loja.campus,
                               style: new TextStyle(fontSize: 18.0),
                             ),
                           ),
                           new Padding(
                             padding: new EdgeInsets.all(10.0),
                             child: new Text(
-                              "Bloco: " + widget.loja.block,
+                              widget.loja.block,
                               style: new TextStyle(fontSize: 18.0),
                             ),
                           ),
                           new Padding(
                             padding: new EdgeInsets.all(10.0),
                             child: new Text(
-                              "Andar: " + widget.loja.floor,
+                              widget.loja.floor,
                               style: new TextStyle(fontSize: 18.0),
                             ),
                           )

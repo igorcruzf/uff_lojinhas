@@ -60,15 +60,14 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
   Future _uploadFile() async {
     StorageReference storageReference = FirebaseStorage.instance
         .ref()
-        .child('images/${Path.basename(_image.path)}}');
+        .child('images/${Path.basename(_image.path)}');
     StorageUploadTask uploadTask = storageReference.putFile(_image);
     await uploadTask.onComplete;
-    print('File Uploaded');
-    storageReference.getDownloadURL().then((fileURL) {
-      setState(() {
-        _urlPhoto = fileURL;
-      });
+    var dowurl = await storageReference.getDownloadURL();
+    setState(() {
+      _urlPhoto = dowurl.toString();
     });
+    
   }
 
   void _submit() async {
@@ -79,7 +78,7 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
     try {
       final FirebaseUser user = await auth.currentUser();
       CollectionReference shop = Firestore.instance.collection('shops');
-      _uploadFile();
+      await _uploadFile();
       shop.add({
         "idOwner": user.uid,
         "name": _name,
@@ -178,9 +177,8 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
 
   RaisedButton _uploadPhotoField() {
     return RaisedButton(
-      child: Text('Choose File'),
+      child: Text('Selecione uma imagem'),
       onPressed: _chooseFile,
-      color: Colors.grey,
     );
   }
 
