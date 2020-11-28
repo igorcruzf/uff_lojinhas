@@ -41,7 +41,7 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
         ),
       );
     } on PlatformException catch (e) {
-      _showAlert(context, e.code);
+      _showAlert(context, e.message);
     } finally {
       setState(() {
         _isLoading = false;

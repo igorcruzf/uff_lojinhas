@@ -32,7 +32,7 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
       await auth.signInWithEmailAndPassword(_email, _password);
       Navigator.of(context).pop();
     } on PlatformException catch (e) {
-      _showAlert(context, e.code);
+      _showAlert(context, e.message);
     } finally{
       setState(() {
         _isLoading = false;
