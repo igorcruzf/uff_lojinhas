@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uff_lojinhas/services/auth.dart';
+import 'error_messages.dart';
 import 'shop_form_register.dart';
 import '../../utils/validators.dart';
 
@@ -41,7 +42,7 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
         ),
       );
     } on PlatformException catch (e) {
-      _showAlert(context, e.code);
+      _showAlert(context, errorMessagesRegister[e.code]);
     } finally {
       setState(() {
         _isLoading = false;
@@ -53,16 +54,17 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-                title: Text("Registration failed"),
-                content: Text(code),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text("OK"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ]));
+            title: Text("Erro"),
+            content: Text(code),
+            actions: <Widget>[
+              GestureDetector(
+                child: Text("OK"),
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ]
+        ));
   }
 
   TextField _emailTextField() {
@@ -94,6 +96,7 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
       ),
     );
   }
+
 
   List<Widget> _buildChildren() {
     bool submitEnabled = widget.emailValidator.isValid(_email) &&
