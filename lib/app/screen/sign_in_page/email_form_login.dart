@@ -72,8 +72,7 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
     );
   }
 
-
-  TextField _emailTextField(){
+  TextField _emailTextField() {
     bool showErrorText = _submitted && !widget.emailValidator.isValid(_email);
     return TextField(
       focusNode: _emailFocusNode,
@@ -88,8 +87,9 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
     );
   }
 
-  TextField _passwordTextField(){
-    bool showErrorText = _submitted && !widget.passwordValidator.isValid(_password);
+  TextField _passwordTextField() {
+    bool showErrorText =
+        _submitted && !widget.passwordValidator.isValid(_password);
     return TextField(
       focusNode: _passwordFocusNode,
       textInputAction: TextInputAction.done,
@@ -106,7 +106,8 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
 
   List<Widget> _buildChildren() {
     bool submitEnabled = widget.emailValidator.isValid(_email) &&
-        widget.passwordValidator.isValid(_password) && !_isLoading;
+        widget.passwordValidator.isValid(_password) &&
+        !_isLoading;
     return [
       _emailTextField(),
       SizedBox(height: 16),
@@ -117,21 +118,19 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
         child: Text("Logar"),
       ),
       RaisedButton(
-        onPressed: () => _registerWithEmail(context),
-        child: Text("Cadastre-se")
-      )
+          onPressed: () => _registerWithEmail(context),
+          child: Text("Cadastre-se"))
     ];
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: _buildChildren(),
-      )
-    );
+        padding: EdgeInsets.all(32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: _buildChildren(),
+        ));
   }
 }

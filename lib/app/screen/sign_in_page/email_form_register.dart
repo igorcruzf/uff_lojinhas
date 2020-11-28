@@ -67,7 +67,6 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
         ));
   }
 
-
   TextField _emailTextField() {
     bool showErrorText = !widget.emailValidator.isValid(_email) && _submitted;
     return TextField(
@@ -140,4 +139,3 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
     );
   }
 }
-

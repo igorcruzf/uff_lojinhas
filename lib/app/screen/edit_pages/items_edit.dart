@@ -85,14 +85,29 @@ class _State extends State<ItemsEditPage> {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
-              return Center(
-                child: Column(
-                  children: <Widget>[
-                    Text("Carregando items"),
-                    CircularProgressIndicator()
-                  ],
-                ),
-              );
+              return Container(
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Carregando itens...",
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25,
+                            fontFamily: 'sans',
+                            decoration: TextDecoration.none,
+                            color: Colors.indigo),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.all(30),
+                          child: CircularProgressIndicator(
+                              backgroundColor: Colors.grey))
+                    ],
+                  ));
               break;
             case ConnectionState.active:
             case ConnectionState.done:

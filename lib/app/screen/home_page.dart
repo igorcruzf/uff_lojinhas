@@ -21,7 +21,6 @@ class _State extends State<HomePage> {
   Firestore db = Firestore.instance;
 
   bool logged = false;
-  
 
   @override
   void initState() {
@@ -46,21 +45,22 @@ class _State extends State<HomePage> {
     });
   }
 
-  void _getProvider()async{
+  void _getProvider() async {
     final FirebaseUser user = await auth.currentUser();
-    if(user.providerData[0].providerId == "password" || user.providerData[1].providerId == "password"){
+    if (user.providerData[0].providerId == "password" ||
+        user.providerData[1].providerId == "password") {
       logged = true;
     }
   }
 
   List<Widget> createCardList(List<DocumentSnapshot> list) {
-    List cardList = new List<Widget>();
+    List cardList = List<Widget>();
 
     list.forEach((shop) => cardList
-        .add(new CardShop(Shop.mapToShop(shop.data)))); //Cria um card por loja
+        .add(CardShop(Shop.mapToShop(shop.data)))); //Cria um card por loja
 
     if (cardList.isEmpty) {
-      cardList.add(new Text(
+      cardList.add(Text(
         "Nenhuma lojinha encontrada =/",
         textAlign: TextAlign.center,
         overflow: TextOverflow.ellipsis,
@@ -97,32 +97,46 @@ class _State extends State<HomePage> {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
-              return Center(
-                child: Column(
-                  children: <Widget>[
-                    new Text(
-                      "Carregando lojinhas...",
+              return Container(
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Carregando...",
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25,
+                            fontFamily: 'sans',
+                            decoration: TextDecoration.none,
+                            color: Colors.indigo),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.all(30),
+                          child: CircularProgressIndicator(
+                              backgroundColor: Colors.grey))
+                    ],
+                  ));
+              break;
+            case ConnectionState.active:
+            case ConnectionState.done:
+              if (snapshot.hasError) {
+                return Container(
+                    decoration: BoxDecoration(color: Colors.white),
+                    child: Text(
+                      "Erro ao carregar lojinhas.",
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 25,
-                          color: Colors.white),
-                    ),
-                    CircularProgressIndicator()
-                  ],
-                ),
-              );
-              break;
-            case ConnectionState.active:
-            case ConnectionState.done:
-              if (snapshot.hasError) {
-                return new Text(
-                  "Erro ao carregar as lojinhas",
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                );
+                          fontFamily: 'sans',
+                          decoration: TextDecoration.none,
+                          color: Colors.indigo),
+                    ));
               } else {
                 QuerySnapshot querySnapshot = snapshot.data;
 
@@ -140,37 +154,36 @@ class _State extends State<HomePage> {
                                     fontSize: 12,
                                     color: Colors.white),
                               )),
-                            if(logged)
+                          if (logged)
                             FlatButton(
-                              onPressed: () => _edit(context),
-                              child: Text(
-                                "Editar",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12,
-                                    color: Colors.white),
-                              ))
-                          
+                                onPressed: () => _edit(context),
+                                child: Text(
+                                  "Editar",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12,
+                                      color: Colors.white),
+                                ))
                         ]),
-                    body: new Container(
+                    body: Container(
                         child: Column(
                             children: ([
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children:[
-                          Text("Filtro por campus:",
-                          style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15,
-                                    color: Colors.black),),
-                          FilterButton(filter: (String filter) {
-                            setState(() => _getShops(filter));
-                          }),
-                        ]
-                      ),
-                      
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              "Filtro por campus:",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15,
+                                  color: const Color(0xFF3F3E3E)),
+                            ),
+                            FilterButton(filter: (String filter) {
+                              setState(() => _getShops(filter));
+                            }),
+                          ]),
                       Expanded(
-                          child: new ListView(
+                          child: ListView(
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                         children: createCardList(querySnapshot.documents
