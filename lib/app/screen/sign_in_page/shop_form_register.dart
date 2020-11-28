@@ -19,9 +19,11 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _blockController = TextEditingController();
   final TextEditingController _floorController = TextEditingController();
+  final TextEditingController _numberController = TextEditingController();
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _blockFocusNode = FocusNode();
   final FocusNode _floorFocusNode = FocusNode();
+  final FocusNode _numberFocusNode = FocusNode();
 
   File _image;
   final picker = ImagePicker();
@@ -30,13 +32,14 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
   String _campus;
   String get _block => _blockController.text;
   String get _floor => _floorController.text;
+  String get _number => _floorController.text;
   String _urlPhoto;
   bool _submitted = false;
   bool _isLoading = false;
 
   _updateState() {
     print(
-        "name $_name, campus: $_campus,block: $_block,floor: $_floor, urlPhoto: $_urlPhoto");
+        "name $_name,block: $_block,floor: $_floor, number: $_number");
     setState(() {});
   }
 
@@ -85,7 +88,8 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
         "campus": _campus,
         "block": _block,
         "floor": _floor,
-        "urlPhoto": _urlPhoto
+        "urlPhoto": _urlPhoto,
+        "number": _number
       });
       Navigator.of(context).push(
         MaterialPageRoute<void>(
@@ -182,6 +186,17 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
     );
   }
 
+  TextField _numberTextField() {
+    return TextField(
+      focusNode: _numberFocusNode,
+      controller: _numberController,
+      onChanged: (number) => _updateState(),
+      decoration: InputDecoration(
+        labelText: "Num. celular",
+      ),
+    );
+  }
+
   List<Widget> _buildChildren() {
     bool submitEnabled = widget.nameValidator.isValid(_name) &&
         widget.campusValidator.isValid(_campus) &&
@@ -194,6 +209,8 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
       _blockTextField(),
       SizedBox(height: 32),
       _floorTextField(),
+      SizedBox(height: 32),
+      _numberTextField(),
       SizedBox(height: 32),
       _uploadPhotoField(),
       SizedBox(height: 32),

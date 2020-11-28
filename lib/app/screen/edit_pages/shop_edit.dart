@@ -20,14 +20,18 @@ class _ShopEditPageState extends State<ShopEditPage> {
   TextEditingController _nameController;
   TextEditingController _blockController;
   TextEditingController _floorController;
+  TextEditingController _numberController;
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _blockFocusNode = FocusNode();
   final FocusNode _floorFocusNode = FocusNode();
+  final FocusNode _numberFocusNode = FocusNode();
+
 
   String get _name => _nameController.text;
   String _campus;
   String get _block => _blockController.text;
   String get _floor => _floorController.text;
+  String get _number => _numberController.text;
   String _urlPhoto;
   bool _submitted = false;
   bool _isLoading = false;
@@ -76,13 +80,14 @@ class _ShopEditPageState extends State<ShopEditPage> {
       _campus = loja.campus;
       _blockController = TextEditingController(text: loja.block);
       _floorController = TextEditingController(text: loja.floor);
+      _numberController = TextEditingController(text: loja.number);
       _urlPhoto = loja.urlPhoto;
     });
   }
 
   _updateState() {
     print(
-        "name $_name, campus: $_campus,block: $_block,floor: $_floor, urlPhoto: $_urlPhoto");
+        "name $_name,block: $_block,floor: $_floor, number: $_number");
     setState(() {});
   }
 
@@ -124,7 +129,8 @@ class _ShopEditPageState extends State<ShopEditPage> {
             "campus": _campus,
             "block": _block,
             "floor": _floor,
-            "urlPhoto": _urlPhoto
+            "urlPhoto": _urlPhoto,
+            "number": _number
           })
           .then((value) => print("Shop Updated"))
           .catchError((error) => print("Failed to update shop: $error"));
@@ -224,6 +230,17 @@ class _ShopEditPageState extends State<ShopEditPage> {
     );
   }
 
+  TextField _numberTextField() {
+    return TextField(
+      focusNode: _numberFocusNode,
+      controller: _numberController,
+      onChanged: (number) => _updateState(),
+      decoration: InputDecoration(
+        labelText: "Num. celular",
+      ),
+    );
+  }
+
   List<Widget> _buildChildren() {
     bool submitEnabled = widget.nameValidator.isValid(_name) &&
         widget.campusValidator.isValid(_campus) &&
@@ -236,6 +253,8 @@ class _ShopEditPageState extends State<ShopEditPage> {
       _blockTextField(),
       SizedBox(height: 32),
       _floorTextField(),
+      SizedBox(height: 32),
+      _numberTextField(),
       SizedBox(height: 32),
       _uploadPhotoField(),
       SizedBox(height: 32),

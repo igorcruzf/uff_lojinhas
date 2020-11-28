@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../whats_icons.dart';
 import '../utils/CardItem.dart';
 import '../model/Shop.dart';
 import '../model/Item.dart';
@@ -31,6 +33,16 @@ class _State extends State<ShowShopPage> {
     stream.listen((dados) {
       _controller.add(dados);
     });
+  }
+
+  void _launchURL() async {
+    String _link = "https://wa.me/" + widget.loja.number;
+    print(_link);
+    if (await canLaunch(_link)) {
+      await launch(_link);
+    } else {
+      throw 'Could not launch $_link';
+    }
   }
 
   List<Widget> createCardList(List<DocumentSnapshot> list) {
@@ -78,17 +90,16 @@ class _State extends State<ShowShopPage> {
                 }
                 return Scaffold(
                     appBar: AppBar(
-                        title: Text(widget.loja.name),
-                        backgroundColor: Colors.indigo,
+                      title: Text(widget.loja.name),
+                      backgroundColor: Colors.indigo,
                     ),
                     body: new Container(
-                        child: new Column(
-                          children: <Widget>[
-                            new SizedBox(
-                      width: 400.0,
-                      height: 200.0,
-                      child:
-                      new Image.network(widget.loja.urlPhoto, fit: BoxFit.cover)),
+                        child: new Column(children: <Widget>[
+                      new SizedBox(
+                          width: 400.0,
+                          height: 200.0,
+                          child: new Image.network(widget.loja.urlPhoto,
+                              fit: BoxFit.cover)),
                       new Row(
                         children: <Widget>[
                           new Padding(
@@ -115,21 +126,25 @@ class _State extends State<ShowShopPage> {
                               widget.loja.floor,
                               style: new TextStyle(fontSize: 18.0),
                             ),
-                          )
+                          ),
+                          new GestureDetector(
+                            onTap: _launchURL,
+                            child: new Icon(
+                              Whats.whatsapp,
+                              size: 24,
+                            ),
+                          ),
                         ],
                       ),
-                            new Expanded(
-                              child: new Container(
-                                height: 200.0,
-                                child: new ListView(
-                                  children: createCardList(querySnapshot.documents.toList()),
-                                )
-                              )
-                            ),
-                          ]
-                        ) // Aqui que efetivamente é chamado os cards
-                    )
-                );
+                      new Expanded(
+                          child: new Container(
+                              height: 200.0,
+                              child: new ListView(
+                                children: createCardList(
+                                    querySnapshot.documents.toList()),
+                              ))),
+                    ]) // Aqui que efetivamente é chamado os cards
+                        ));
               }
           }
         });
