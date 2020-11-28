@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:uff_lojinhas/app/utils/FilterButton.dart';
 import 'package:uff_lojinhas/services/auth.dart';
@@ -18,6 +21,9 @@ class HomePage extends StatefulWidget {
 class _State extends State<HomePage> {
   final _controller = StreamController<QuerySnapshot>.broadcast();
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
   Firestore db = Firestore.instance;
 
   bool logged = false;
@@ -27,7 +33,66 @@ class _State extends State<HomePage> {
   void initState() {
     _getShops("Todos");
     _getProvider();
+    registerNotification();
+    configLocalNotification();
     super.initState();
+  }
+
+  void registerNotification() {
+    firebaseMessaging.requestNotificationPermissions();
+
+    firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
+      print('onMessage: $message');
+      showNotification(message['notification']);
+      return;
+    }, onResume: (Map<String, dynamic> message) {
+      print('onResume: $message');
+      return;
+    }, onLaunch: (Map<String, dynamic> message) {
+      print('onLaunch: $message');
+      return;
+    });
+
+    firebaseMessaging.getToken().then((token) {
+      print('token: $token');
+    }).catchError((err) {
+    });
+  }
+
+  void configLocalNotification() {
+    var initializationSettingsAndroid =
+    new AndroidInitializationSettings('app_icon');
+    var initializationSettingsIOS = new IOSInitializationSettings();
+    var initializationSettings = new InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  void showNotification(message) async {
+    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+      'br.uff.uff_lojinhas',
+      'Flutter chat demo',
+      'your channel description',
+      playSound: true,
+      enableVibration: true,
+      importance: Importance.Max,
+      priority: Priority.High,
+    );
+    var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+    var platformChannelSpecifics = new NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+
+    print(message);
+//    print(message['body'].toString());
+//    print(json.encode(message));
+
+    await flutterLocalNotificationsPlugin.show(0, message['title'].toString(),
+        message['body'].toString(), platformChannelSpecifics,
+        payload: json.encode(message));
+
+//    await flutterLocalNotificationsPlugin.show(
+//        0, 'plain title', 'plain body', platformChannelSpecifics,
+//        payload: 'item x');
   }
 
   //Acesso ao banco de dados
@@ -48,7 +113,7 @@ class _State extends State<HomePage> {
 
   void _getProvider()async{
     final FirebaseUser user = await auth.currentUser();
-    if(user.providerData[0].providerId == "password" || user.providerData[1].providerId == "password"){
+    if(user.providerData[0].providerId == "password" || (user.providerData[1] != null && user.providerData[1].providerId == "password")){
       logged = true;
     }
   }
