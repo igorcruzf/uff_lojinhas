@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:uff_lojinhas/app/utils/validators.dart';
 import 'package:uff_lojinhas/services/auth.dart';
 import 'email_form_register.dart';
+import 'error_messages.dart';
 
 class EmailFormLogin extends StatefulWidget with EmailAndPasswordValidators {
   @override
@@ -32,7 +33,7 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
       await auth.signInWithEmailAndPassword(_email, _password);
       Navigator.of(context).pop();
     } on PlatformException catch (e) {
-      _showAlert(context, e.code);
+      _showAlert(context, errorMessagesLogin[e.code]);
     } finally{
       setState(() {
         _isLoading = false;
@@ -44,7 +45,7 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-            title: Text("Log in failed"),
+            title: Text("Erro"),
             content: Text(code),
             actions: <Widget>[
               GestureDetector(
