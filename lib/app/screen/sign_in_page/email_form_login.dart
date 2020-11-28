@@ -47,9 +47,9 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
             title: Text("Log in failed"),
             content: Text(code),
             actions: <Widget>[
-              TextButton(
+              GestureDetector(
                 child: Text("OK"),
-                onPressed: () {
+                onTap: () {
                   Navigator.of(context).pop();
                 },
               )

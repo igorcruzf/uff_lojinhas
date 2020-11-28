@@ -56,9 +56,9 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
             title: Text("Registration failed"),
             content: Text(code),
             actions: <Widget>[
-              TextButton(
+              GestureDetector(
                 child: Text("OK"),
-                onPressed: () {
+                onTap: () {
                   Navigator.of(context).pop();
                 },
               )
