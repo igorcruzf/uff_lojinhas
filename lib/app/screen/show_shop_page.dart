@@ -1,9 +1,8 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:uff_lojinhas/app/screen/home_page.dart';
-import 'home_page.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../whats_icons.dart';
 import '../utils/CardItem.dart';
 import '../model/Shop.dart';
 import '../model/Item.dart';
@@ -36,6 +35,16 @@ class _State extends State<ShowShopPage> {
     stream.listen((dados) {
       _controller.add(dados);
     });
+  }
+
+  void _launchURL() async {
+    String _link = "https://wa.me/" + widget.loja.number;
+    print(_link);
+    if (await canLaunch(_link)) {
+      await launch(_link);
+    } else {
+      throw 'Could not launch $_link';
+    }
   }
 
   List<Widget> createCardList(List<DocumentSnapshot> list) {
@@ -112,7 +121,7 @@ class _State extends State<ShowShopPage> {
                 if (querySnapshot.documents.length == 0) {
                   return Scaffold(
                       appBar: AppBar(
-                          title: Text("Lojinhas da UFF"),
+                          title: Text(widget.loja.name),
                           backgroundColor: Colors.indigo),
                       body: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

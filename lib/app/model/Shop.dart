@@ -7,6 +7,7 @@ class Shop {
   String _campus;
   String _block;
   String _floor;
+  String _number;
 
   static Shop mapToShop(Map<String, dynamic> data) {
     Shop shop = new Shop();
@@ -15,10 +16,11 @@ class Shop {
     shop.campus = data["campus"];
     shop.block = data["block"];
     shop.floor = data["floor"];
-    shop.urlPhoto = data.containsKey("urlPhoto") &&
-            data["urlPhoto"].toString().isNotEmpty
+    shop.urlPhoto = data["urlPhoto"] != null || data["urlPhoto"] != ""
         ? data["urlPhoto"]
-        : "https://www.milliescookies.com/tco-images/unsafe/fit-in/769x386/center/middle/smart/filters:upscale():fill(white):sharpen(0.5,0.5,true)/https://www.milliescookies.com/static/uploads/2017/04/page-not-found.jpg";
+        : "https://firebasestorage.googleapis.com/v0/b/uff-lojinhas.appspot.com/o/images%2Fimages%2Fboloicone.png?alt=media&token=250c8039-4a6c-4e4f-b3d2-2f4e61fbb430";
+    shop.number = data["number"];
+
     return shop;
   }
 
@@ -36,6 +38,7 @@ class Shop {
       "campus": this.campus,
       "block": this.block,
       "floor": this.floor,
+      "number": this.number,
     };
 
     return map;
@@ -76,4 +79,11 @@ class Shop {
   set urlPhoto(String value) {
     _urlPhoto = value;
   }
+
+  String get number => _number;
+
+  set number(String value) {
+    _number = value;
+  }
+
 }

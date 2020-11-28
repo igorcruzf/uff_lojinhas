@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as Path;
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../home_page.dart';
@@ -13,14 +17,15 @@ class ItemsFormRegister extends StatefulWidget with ItemsFieldsValidators {
 class _ItemsFormRegisterState extends State<ItemsFormRegister> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
-  final TextEditingController _urlPhotoController = TextEditingController();
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _priceFocusNode = FocusNode();
-  final FocusNode _urlPhotoFocusNode = FocusNode();
+
+  File _image;
+  final picker = ImagePicker();
 
   String get _name => _nameController.text;
   String get _price => _priceController.text;
-  String get _urlPhoto => _urlPhotoController.text;
+  String _urlPhoto;
   bool _submitted = false;
   bool _isLoading = false;
 
@@ -30,6 +35,27 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
   }
 
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final Firestore db = Firestore.instance;
+
+  Future _chooseFile() async {
+    await picker.getImage(source: ImageSource.gallery).then((image) {
+      setState(() {
+        _image = File(image.path);
+      });
+    });
+  }
+
+  Future _uploadFile() async {
+    StorageReference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('images/${Path.basename(_image.path)}');
+    StorageUploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask.onComplete;
+    var dowurl = await storageReference.getDownloadURL();
+    setState(() {
+      _urlPhoto = dowurl;
+    });
+  }
 
   void _submit() async {
     setState(() {
@@ -39,6 +65,7 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
     try {
       final FirebaseUser user = await auth.currentUser();
       CollectionReference item = Firestore.instance.collection('items');
+      await _uploadFile();
       item.add({
         "idOwner": user.uid,
         "name": _name,
@@ -100,14 +127,10 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
     );
   }
 
-  TextField _urlPhotoTextField() {
-    return TextField(
-      focusNode: _urlPhotoFocusNode,
-      controller: _urlPhotoController,
-      onChanged: (urlPhoto) => _updateState(),
-      decoration: InputDecoration(
-        labelText: "Url da imagem",
-      ),
+  RaisedButton _uploadPhotoField() {
+    return RaisedButton(
+      child: Text('Selecione uma imagem'),
+      onPressed: _chooseFile,
     );
   }
 
@@ -119,7 +142,7 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
       SizedBox(height: 16),
       _priceTextField(),
       SizedBox(height: 32),
-      _urlPhotoTextField(),
+      _uploadPhotoField(),
       SizedBox(height: 32),
       RaisedButton(
         onPressed: submitEnabled ? _submitMore : null,

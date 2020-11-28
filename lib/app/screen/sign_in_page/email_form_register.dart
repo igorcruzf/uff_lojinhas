@@ -40,11 +40,29 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
           builder: (context) => ShopFormRegister(),
         ),
       );
+    } on PlatformException catch (e) {
+      _showAlert(context, e.code);
     } finally {
       setState(() {
         _isLoading = false;
       });
     }
+  }
+
+  void _showAlert(BuildContext context, String code) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+                title: Text("Registration failed"),
+                content: Text(code),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text("OK"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ]));
   }
 
   TextField _emailTextField() {

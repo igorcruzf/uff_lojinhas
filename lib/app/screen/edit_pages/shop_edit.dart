@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as Path;
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,23 +20,28 @@ class _ShopEditPageState extends State<ShopEditPage> {
   TextEditingController _nameController;
   TextEditingController _blockController;
   TextEditingController _floorController;
-  TextEditingController _urlPhotoController;
+  TextEditingController _numberController;
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _blockFocusNode = FocusNode();
   final FocusNode _floorFocusNode = FocusNode();
-  final FocusNode _urlPhotoFocusNode = FocusNode();
+  final FocusNode _numberFocusNode = FocusNode();
+
 
   String get _name => _nameController.text;
   String _campus;
   String get _block => _blockController.text;
   String get _floor => _floorController.text;
-  String get _urlPhoto => _urlPhotoController.text;
+  String get _number => _numberController.text;
+  String _urlPhoto;
   bool _submitted = false;
   bool _isLoading = false;
 
   Firestore db = Firestore.instance;
   Shop loja;
   String id;
+
+  File _image;
+  final picker = ImagePicker();
 
   void initState() {
     _getShop();
@@ -71,14 +80,36 @@ class _ShopEditPageState extends State<ShopEditPage> {
       _campus = loja.campus;
       _blockController = TextEditingController(text: loja.block);
       _floorController = TextEditingController(text: loja.floor);
-      _urlPhotoController = TextEditingController(text: loja.urlPhoto);
+      _numberController = TextEditingController(text: loja.number);
+      _urlPhoto = loja.urlPhoto;
     });
   }
 
   _updateState() {
     print(
-        "name $_name, campus: $_campus,block: $_block,floor: $_floor, urlPhoto: $_urlPhoto");
+        "name $_name,block: $_block,floor: $_floor, number: $_number");
     setState(() {});
+  }
+
+  Future _chooseFile() async {
+    await picker.getImage(source: ImageSource.gallery).then((image) {
+      setState(() {
+        _image = File(image.path);
+      });
+    });
+  }
+
+  Future _uploadFile() async {
+    StorageReference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('images/${Path.basename(_image.path)}');
+    StorageUploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask.onComplete;
+    var dowurl = await storageReference.getDownloadURL();
+    setState(() {
+      _urlPhoto = dowurl.toString();
+    });
+    
   }
 
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -90,6 +121,7 @@ class _ShopEditPageState extends State<ShopEditPage> {
     });
     try {
       CollectionReference shop = Firestore.instance.collection('shops');
+      await _uploadFile();
       shop
           .document(id)
           .updateData({
@@ -97,7 +129,8 @@ class _ShopEditPageState extends State<ShopEditPage> {
             "campus": _campus,
             "block": _block,
             "floor": _floor,
-            "urlPhoto": _urlPhoto
+            "urlPhoto": _urlPhoto,
+            "number": _number
           })
           .then((value) => print("Shop Updated"))
           .catchError((error) => print("Failed to update shop: $error"));
@@ -190,13 +223,20 @@ class _ShopEditPageState extends State<ShopEditPage> {
     );
   }
 
-  TextField _urlPhotoTextField() {
+  RaisedButton _uploadPhotoField() {
+    return RaisedButton(
+      child: Text('Selecione uma imagem'),
+      onPressed: _chooseFile,
+    );
+  }
+
+  TextField _numberTextField() {
     return TextField(
-      focusNode: _urlPhotoFocusNode,
-      controller: _urlPhotoController,
-      onChanged: (urlPhoto) => _updateState(),
+      focusNode: _numberFocusNode,
+      controller: _numberController,
+      onChanged: (number) => _updateState(),
       decoration: InputDecoration(
-        labelText: "Url of a image",
+        labelText: "Num. celular",
       ),
     );
   }
@@ -214,7 +254,9 @@ class _ShopEditPageState extends State<ShopEditPage> {
       SizedBox(height: 32),
       _floorTextField(),
       SizedBox(height: 32),
-      _urlPhotoTextField(),
+      _numberTextField(),
+      SizedBox(height: 32),
+      _uploadPhotoField(),
       SizedBox(height: 32),
       RaisedButton(
         onPressed: submitEnabled ? _submit : null,

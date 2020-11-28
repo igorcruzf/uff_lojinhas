@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uff_lojinhas/app/utils/validators.dart';
 import 'package:uff_lojinhas/services/auth.dart';
@@ -30,11 +31,29 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
       final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signInWithEmailAndPassword(_email, _password);
       Navigator.of(context).pop();
+    } on PlatformException catch (e) {
+      _showAlert(context, e.code);
     } finally {
       setState(() {
         _isLoading = false;
       });
     }
+  }
+
+  void _showAlert(BuildContext context, String code) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+                title: Text("Log in failed"),
+                content: Text(code),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text("OK"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ]));
   }
 
   _updateState() {

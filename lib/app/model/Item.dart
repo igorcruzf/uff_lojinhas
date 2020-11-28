@@ -13,9 +13,9 @@ class Item {
     item.idOwner = data["idOwner"];
     item.name = data["name"];
     item.price = data["price"];
-    item.urlPhoto = data.containsKey("urlPhoto")
+    item.urlPhoto = data["urlPhoto"] != null || data["urlPhoto"] != ""
         ? data["urlPhoto"]
-        : "https://www.milliescookies.com/tco-images/unsafe/fit-in/769x386/center/middle/smart/filters:upscale():fill(white):sharpen(0.5,0.5,true)/https://www.milliescookies.com/static/uploads/2017/04/page-not-found.jpg";
+        : "https://firebasestorage.googleapis.com/v0/b/uff-lojinhas.appspot.com/o/images%2Fimages%2Fboloicone.png?alt=media&token=250c8039-4a6c-4e4f-b3d2-2f4e61fbb430";
     return item;
   }
 
