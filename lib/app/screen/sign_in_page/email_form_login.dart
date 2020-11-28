@@ -32,7 +32,7 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
       await auth.signInWithEmailAndPassword(_email, _password);
       Navigator.of(context).pop();
     } on PlatformException catch (e) {
-      _showAlert(context, e.message);
+      _showAlert(context, errorMessages[e.code]);
     } finally{
       setState(() {
         _isLoading = false;
@@ -44,7 +44,7 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-            title: Text("Log in failed"),
+            title: Text("Erro"),
             content: Text(code),
             actions: <Widget>[
               GestureDetector(
@@ -102,6 +102,12 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
       ),
     );
   }
+
+  static Map<String, String> errorMessages = {
+    "ERROR_INVALID_EMAIL" : "Email inválido",
+    "ERROR_WRONG_PASSWORD" : "Senha incorreta",
+    "ERROR_USER_NOT_FOUND" : "Email ou senha incorretos"
+  };
 
   List<Widget> _buildChildren() {
     bool submitEnabled = widget.emailValidator.isValid(_email) &&

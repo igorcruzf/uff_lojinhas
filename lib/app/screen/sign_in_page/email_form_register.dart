@@ -41,7 +41,7 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
         ),
       );
     } on PlatformException catch (e) {
-      _showAlert(context, e.message);
+      _showAlert(context, errorMessages[e.code]);
     } finally {
       setState(() {
         _isLoading = false;
@@ -53,7 +53,7 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-            title: Text("Registration failed"),
+            title: Text("Erro"),
             content: Text(code),
             actions: <Widget>[
               GestureDetector(
@@ -96,6 +96,12 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
       ),
     );
   }
+  static Map<String, String> errorMessages = {
+    "ERROR_INVALID_EMAIL" : "Email inválido",
+    "ERROR_WRONG_PASSWORD" : "Senha inválida",
+    "ERROR_USER_NOT_FOUND" : "Email ou senha inválidos",
+    "ERROR_EMAIL_ALREADY_IN_USE" : "Email já é cadastrado"
+  };
 
   List<Widget> _buildChildren() {
     bool submitEnabled = widget.emailValidator.isValid(_email) &&
