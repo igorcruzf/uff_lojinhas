@@ -121,7 +121,6 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
 
   Container _campusTextField() {
     return Container(
-      padding: EdgeInsets.all(16),
       child: DropDownFormField(
         titleText: 'Campus',
         hintText: 'Selecione um campus',
@@ -192,7 +191,7 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
       controller: _numberController,
       onChanged: (number) => _updateState(),
       decoration: InputDecoration(
-        labelText: "Num. celular",
+        labelText: "Cel.Ex.:552198444XXXX",
       ),
     );
   }
@@ -203,7 +202,7 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
         widget.blockValidator.isValid(_block);
     return [
       _nameTextField(),
-      SizedBox(height: 16),
+      SizedBox(height: 32),
       _campusTextField(),
       SizedBox(height: 32),
       _blockTextField(),

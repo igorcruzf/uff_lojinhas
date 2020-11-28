@@ -165,7 +165,6 @@ class _ShopEditPageState extends State<ShopEditPage> {
 
   Container _campusTextField() {
     return Container(
-      padding: EdgeInsets.all(16),
       child: DropDownFormField(
         titleText: 'Campus',
         hintText: 'Selecione um campus',
@@ -247,7 +246,7 @@ class _ShopEditPageState extends State<ShopEditPage> {
         widget.blockValidator.isValid(_block);
     return [
       _nameTextField(),
-      SizedBox(height: 16),
+      SizedBox(height: 32),
       _campusTextField(),
       SizedBox(height: 32),
       _blockTextField(),

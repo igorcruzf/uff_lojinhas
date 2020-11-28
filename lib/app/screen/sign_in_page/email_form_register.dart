@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uff_lojinhas/services/auth.dart';
+import 'error_messages.dart';
 import 'shop_form_register.dart';
 import '../../utils/validators.dart';
 
@@ -41,7 +42,7 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
         ),
       );
     } on PlatformException catch (e) {
-      _showAlert(context, errorMessages[e.code]);
+      _showAlert(context, errorMessagesRegister[e.code]);
     } finally {
       setState(() {
         _isLoading = false;
@@ -76,7 +77,7 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
       onChanged: (email) => _updateState(),
       decoration: InputDecoration(
         labelText: "Email",
-        hintText: "seuremail@gmail.com",
+        hintText: "seuemail@gmail.com",
         errorText: showErrorText ? widget.invalidEmailErrorText : null,
       ),
     );
@@ -96,12 +97,7 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
       ),
     );
   }
-  static Map<String, String> errorMessages = {
-    "ERROR_INVALID_EMAIL" : "Email inválido",
-    "ERROR_WRONG_PASSWORD" : "Senha inválida",
-    "ERROR_USER_NOT_FOUND" : "Email ou senha inválidos",
-    "ERROR_EMAIL_ALREADY_IN_USE" : "Email já é cadastrado"
-  };
+
 
   List<Widget> _buildChildren() {
     bool submitEnabled = widget.emailValidator.isValid(_email) &&
