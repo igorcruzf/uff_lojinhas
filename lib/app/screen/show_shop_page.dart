@@ -127,13 +127,18 @@ class _State extends State<ShowShopPage> {
                               style: new TextStyle(fontSize: 18.0),
                             ),
                           ),
-                          new GestureDetector(
-                            onTap: _launchURL,
-                            child: new Icon(
-                              Whats.whatsapp,
-                              size: 24,
-                            ),
-                          ),
+                          new Padding(
+                            padding: EdgeInsets.only(left: 10.0),
+                            child: new GestureDetector(
+                                      onTap: _launchURL,
+                                      child: new Icon(
+                                        Whats.whatsapp,
+                                        size: 24,
+                                      ),
+                                    ),
+
+                          )
+                          
                         ],
                       ),
                       new Expanded(

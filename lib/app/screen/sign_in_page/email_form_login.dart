@@ -81,7 +81,7 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
       onChanged: (email) => _updateState(),
       decoration: InputDecoration(
         labelText: "Email",
-        hintText: "seuremail@gmail.com",
+        hintText: "seuemail@gmail.com",
         errorText: showErrorText ? widget.invalidEmailErrorText : null,
       ),
     );
