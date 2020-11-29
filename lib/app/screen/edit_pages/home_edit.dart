@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'account_edit.dart';
 import 'items_edit.dart';
 import 'shop_edit.dart';
+import 'items_remove.dart';
 import '../sign_in_page/items_form_register.dart';
 import "../home_page.dart";
 
@@ -10,13 +10,6 @@ class HomeEditPage extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
           fullscreenDialog: false, builder: (context) => HomePage()),
-    );
-  }
-
-  void _editAccount(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-          fullscreenDialog: false, builder: (context) => AccountEditPage()),
     );
   }
 
@@ -38,6 +31,13 @@ class HomeEditPage extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
           fullscreenDialog: false, builder: (context) => ItemsFormRegister()),
+    );
+  }
+
+  void _removeItems(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+          fullscreenDialog: false, builder: (context) => ItemsRemovePage()),
     );
   }
 
@@ -75,6 +75,11 @@ class HomeEditPage extends StatelessWidget {
                   RaisedButton(
                     onPressed: () => _registerItems(context),
                     child: Text("Registrar mais produtos"),
+                  ),
+                  SizedBox(height: 16),
+                  RaisedButton(
+                    onPressed: () => _removeItems(context),
+                    child: Text("Remover produtos"),
                   )
                 ])));
   }

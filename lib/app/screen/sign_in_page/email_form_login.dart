@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uff_lojinhas/app/utils/validators.dart';
 import 'package:uff_lojinhas/services/auth.dart';
 import 'email_form_register.dart';
+import 'error_messages.dart';
 
 class EmailFormLogin extends StatefulWidget with EmailAndPasswordValidators {
   @override
@@ -30,11 +32,30 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
       final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signInWithEmailAndPassword(_email, _password);
       Navigator.of(context).pop();
-  } finally{
+    } on PlatformException catch (e) {
+      _showAlert(context, errorMessagesLogin[e.code]);
+    } finally{
       setState(() {
         _isLoading = false;
       });
     }
+  }
+
+  void _showAlert(BuildContext context, String code) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+            title: Text("Erro"),
+            content: Text(code),
+            actions: <Widget>[
+              GestureDetector(
+                child: Text("OK"),
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ]
+        ));
   }
 
   _updateState() {
@@ -51,8 +72,7 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
     );
   }
 
-
-  TextField _emailTextField(){
+  TextField _emailTextField() {
     bool showErrorText = _submitted && !widget.emailValidator.isValid(_email);
     return TextField(
       focusNode: _emailFocusNode,
@@ -61,14 +81,15 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
       onChanged: (email) => _updateState(),
       decoration: InputDecoration(
         labelText: "Email",
-        hintText: "seuremail@gmail.com",
+        hintText: "seuemail@gmail.com",
         errorText: showErrorText ? widget.invalidEmailErrorText : null,
       ),
     );
   }
 
-  TextField _passwordTextField(){
-    bool showErrorText = _submitted && !widget.passwordValidator.isValid(_password);
+  TextField _passwordTextField() {
+    bool showErrorText =
+        _submitted && !widget.passwordValidator.isValid(_password);
     return TextField(
       focusNode: _passwordFocusNode,
       textInputAction: TextInputAction.done,
@@ -85,7 +106,8 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
 
   List<Widget> _buildChildren() {
     bool submitEnabled = widget.emailValidator.isValid(_email) &&
-        widget.passwordValidator.isValid(_password) && !_isLoading;
+        widget.passwordValidator.isValid(_password) &&
+        !_isLoading;
     return [
       _emailTextField(),
       SizedBox(height: 16),
@@ -96,21 +118,19 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
         child: Text("Logar"),
       ),
       RaisedButton(
-        onPressed: () => _registerWithEmail(context),
-        child: Text("Cadastre-se")
-      )
+          onPressed: () => _registerWithEmail(context),
+          child: Text("Cadastre-se"))
     ];
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: _buildChildren(),
-      )
-    );
+        padding: EdgeInsets.all(32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: _buildChildren(),
+        ));
   }
 }

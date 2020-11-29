@@ -32,8 +32,11 @@ class ControlPage extends StatelessWidget {
           }else{
             return Scaffold(
               body: Center(
-                child: CircularProgressIndicator(),
-              ),
+                child: Padding(
+                    padding: EdgeInsets.all(30),
+                    child: CircularProgressIndicator(
+                        backgroundColor: Colors.grey)
+                )),
             );
           }
         }

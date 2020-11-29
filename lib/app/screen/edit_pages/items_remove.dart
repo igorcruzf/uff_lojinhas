@@ -2,15 +2,15 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../utils/CardItemEdit.dart';
+import '../../utils/CardItemRemove.dart';
 import '../../model/Shop.dart';
 import '../../model/Item.dart';
 
-class ItemsEditPage extends StatefulWidget {
+class ItemsRemovePage  extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<ItemsEditPage> {
+class _State extends State<ItemsRemovePage > {
   final _controller = StreamController<QuerySnapshot>.broadcast();
   final FirebaseAuth auth = FirebaseAuth.instance;
   Firestore db = Firestore.instance;
@@ -71,7 +71,7 @@ class _State extends State<ItemsEditPage> {
   List<Widget> createCardList(List<DocumentSnapshot> list) {
     List cardList = new List<Widget>();
 
-    list.forEach((item) => cardList.add(new CardItemEdit(Item.mapToItem(item.data), item.documentID))); //Cria um card por item
+    list.forEach((item) => cardList.add(new CardItemRemove(Item.mapToItem(item.data), item.documentID))); //Cria um card por item
     
     return cardList;
   }
@@ -85,29 +85,14 @@ class _State extends State<ItemsEditPage> {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
-              return Container(
-                  decoration: BoxDecoration(color: Colors.white),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        "Carregando itens...",
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25,
-                            fontFamily: 'sans',
-                            decoration: TextDecoration.none,
-                            color: Colors.indigo),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.all(30),
-                          child: CircularProgressIndicator(
-                              backgroundColor: Colors.grey))
-                    ],
-                  ));
+              return Center(
+                child: Column(
+                  children: <Widget>[
+                    Text("Carregando items"),
+                    CircularProgressIndicator()
+                  ],
+                ),
+              );
               break;
             case ConnectionState.active:
             case ConnectionState.done:
@@ -128,7 +113,7 @@ class _State extends State<ItemsEditPage> {
                 }
                 return Scaffold(
                     appBar: AppBar(
-                      title: Text("Escolha o item a editar"),
+                      title: Text("Escolha o item a remover"),
                       backgroundColor: Colors.indigo,
                     ),
                     body: new Container(

@@ -6,6 +6,7 @@ import 'package:path/path.dart' as Path;
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:uff_lojinhas/app/utils/SendNotification.dart';
 import '../home_page.dart';
 import '../../utils/validators.dart';
 
@@ -90,6 +91,8 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
   }
 
   void _submitFinal() async {
+    SendNotification sendNotification = SendNotification();
+
     _submit();
     Navigator.of(context).push(
       MaterialPageRoute<void>(
@@ -97,6 +100,9 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
         builder: (context) => HomePage(),
       ),
     );
+
+    sendNotification.sendMessage("Tem lojinha nova no pedaço, bora dar uma conferida?", "Lojinhas da UFF");
+
   }
 
   TextField _nameTextField() {
