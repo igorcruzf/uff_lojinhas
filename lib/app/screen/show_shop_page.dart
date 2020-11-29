@@ -50,8 +50,10 @@ class _State extends State<ShowShopPage> {
   List<Widget> createCardList(List<DocumentSnapshot> list) {
     List cardList = new List<Widget>();
 
-    list.forEach((item) => cardList
-        .add(new CardItem(Item.mapToItem(item.data)))); //Cria um card por item
+    list.forEach((item) =>
+        cardList
+            .add(
+            new CardItem(Item.mapToItem(item.data)))); //Cria um card por item
 
     return cardList;
   }
@@ -148,74 +150,79 @@ class _State extends State<ShowShopPage> {
                     ),
                     body: Container(
                         child: Column(children: <Widget>[
-                      AspectRatio(
-                          aspectRatio: 5 / 2,
-                          child: Image.network(widget.loja.urlPhoto,
-                              fit: BoxFit.cover)),
-                      Container(
-                          color: Colors.white,
-                          child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Row(
-                                  mainAxisAlignment:
+                          AspectRatio(
+                              aspectRatio: 5 / 2,
+                              child: Image.network(widget.loja.urlPhoto,
+                                  fit: BoxFit.cover)),
+                          Container(
+                              color: Colors.white,
+                              child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Row(
+                                      mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Row(children: <Widget>[
-                                      Icon(Icons.location_on,
-                                          color: const Color(0xFF3F3E3E)),
-                                      Padding(
-                                          padding: EdgeInsets.only(left: 3),
-                                          child: Text(widget.loja.campus,
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  color:
+                                      children: <Widget>[
+                                        Row(children: <Widget>[
+                                          Icon(Icons.location_on,
+                                              color: const Color(0xFF3F3E3E)),
+                                          Padding(
+                                              padding: EdgeInsets.only(left: 3),
+                                              child: Text(widget.loja.campus,
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      color:
                                                       const Color(0xFF3F3E3E))))
-                                    ]),
-                                    Row(children: <Widget>[
-                                      Row(children: <Widget>[
-                                        Icon(Icons.apartment,
-                                            color: const Color(0xFF3F3E3E)),
-                                        Padding(
-                                            padding: EdgeInsets.only(
-                                                right: 12, left: 3),
-                                            child: Text(
-                                                "Bloco: ${widget.loja.block}",
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: const Color(
-                                                        0xFF3F3E3E))))
-                                      ]),
-                                      Row(children: <Widget>[
-                                        Icon(Icons.stairs,
-                                            color: const Color(0xFF3F3E3E)),
-                                        Padding(
-                                            padding: EdgeInsets.only(left: 3),
-                                            child: Text(
-                                                "Andar: ${widget.loja.floor}",
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: const Color(
-                                                        0xFF3F3E3E))))
-                                      ]),
-                                      Row(children: <Widget>[
-                                        Padding(
-                                        padding:  EdgeInsets.only(left: 12),
-                                        child:GestureDetector(
-                                          onTap: _launchURL,
-                                          child: Icon(Whats.whatsapp),
-                                        )
-                                      ),
-                                      ])
-                                    ])
-                                  ]))),
-                      Expanded(
-                          child: new Container(
-                              child: new ListView(
-                        children:
-                            createCardList(querySnapshot.documents.toList()),
-                      ))),
-                    ]) // Aqui que efetivamente é chamado os cards
-                        ));
+                                        ]),
+                                        Row(children: <Widget>[
+                                          Row(children: <Widget>[
+                                            Icon(Icons.apartment,
+                                                color: const Color(0xFF3F3E3E)),
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    right: 12, left: 3),
+                                                child: Text(
+                                                    "Bloco: ${widget.loja
+                                                        .block}",
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        color: const Color(
+                                                            0xFF3F3E3E))))
+                                          ]),
+                                          Row(children: <Widget>[
+                                            Icon(Icons.stairs,
+                                                color: const Color(0xFF3F3E3E)),
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 3),
+                                                child: Text(
+                                                    "Andar: ${widget.loja
+                                                        .floor}",
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        color: const Color(
+                                                            0xFF3F3E3E))))
+                                          ]),
+                                          Row(children: <Widget>[
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 12),
+                                                child: GestureDetector(
+                                                  onTap: _launchURL,
+                                                  child: Icon(Whats.whatsapp),
+                                                )
+                                            ),
+                                          ])
+                                        ])
+                                      ]))),
+                          Expanded(
+                              child: new Container(
+                                  child: new ListView(
+                                    children:
+                                    createCardList(
+                                        querySnapshot.documents.toList()),
+                                  ))),
+                        ]) // Aqui que efetivamente é chamado os cards
+                    ));
               }
           }
         });
