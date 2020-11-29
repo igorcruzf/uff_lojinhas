@@ -20,8 +20,8 @@ class ItemEditPage extends StatefulWidget with ItemsFieldsValidators {
 }
 
 class _ItemEditPageState extends State<ItemEditPage> {
-  TextEditingController _nameController;
-  TextEditingController _priceController;
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _priceController = TextEditingController();
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _priceFocusNode = FocusNode();
 
@@ -58,15 +58,17 @@ class _ItemEditPageState extends State<ItemEditPage> {
   }
 
   Future _uploadFile() async {
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        .child('images/${Path.basename(_image.path)}');
-    StorageUploadTask uploadTask = storageReference.putFile(_image);
-    await uploadTask.onComplete;
-    var dowurl = await storageReference.getDownloadURL();
-    setState(() {
-      _urlPhoto = dowurl;
-    });
+    if(_image != null){
+      StorageReference storageReference = FirebaseStorage.instance
+          .ref()
+          .child('images/${Path.basename(_image.path)}');
+      StorageUploadTask uploadTask = storageReference.putFile(_image);
+      await uploadTask.onComplete;
+      var dowurl = await storageReference.getDownloadURL();
+      setState(() {
+        _urlPhoto = dowurl;
+      });
+    }
   }
 
   void _getItem() {
