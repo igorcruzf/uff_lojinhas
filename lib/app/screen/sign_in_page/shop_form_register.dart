@@ -33,7 +33,7 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
   String _campus;
   String get _block => _blockController.text;
   String get _floor => _floorController.text;
-  String get _number => _floorController.text;
+  String get _number => _numberController.text;
   String _urlPhoto;
   bool _submitted = false;
   bool _isLoading = false;
