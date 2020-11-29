@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'items_edit.dart';
 import 'shop_edit.dart';
 import 'items_remove.dart';
-import '../sign_in_page/items_form_register.dart';
+import 'items_new.dart';
 import "../home_page.dart";
 
 class HomeEditPage extends StatelessWidget {
@@ -30,7 +30,7 @@ class HomeEditPage extends StatelessWidget {
   void _registerItems(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-          fullscreenDialog: false, builder: (context) => ItemsFormRegister()),
+          fullscreenDialog: false, builder: (context) => ItemsFormNew()),
     );
   }
 
