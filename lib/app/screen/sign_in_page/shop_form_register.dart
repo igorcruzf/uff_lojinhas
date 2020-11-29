@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:uff_lojinhas/app/utils/SendNotification.dart';
 import 'items_form_register.dart';
 import '../../utils/validators.dart';
 
@@ -58,6 +59,7 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
   }
 
   Future _uploadFile() async {
+    try{
     StorageReference storageReference = FirebaseStorage.instance
         .ref()
         .child('images/${Path.basename(_image.path)}');
@@ -67,10 +69,14 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
     setState(() {
       _urlPhoto = dowurl.toString();
     });
-    
+    } catch (err){
+      print(err);
+      return;
+    }
   }
 
   void _submit() async {
+    SendNotification sendNotification = SendNotification();
     setState(() {
       _submitted = true;
       _isLoading = true;
@@ -94,6 +100,7 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
         ),
       );
     } finally {
+      sendNotification.sendMessage("Tem lojinha nova no pedaço, bora dar uma conferida?", "Lojinhas da UFF");
       setState(() {
         _isLoading = false;
       });

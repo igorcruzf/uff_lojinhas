@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:uff_lojinhas/app/utils/FilterButton.dart';
+import 'package:uff_lojinhas/app/utils/SendNotification.dart';
 import 'package:uff_lojinhas/services/auth.dart';
+
+
 
 import 'edit_pages/home_edit.dart';
 import '../utils/CardShop.dart';
@@ -22,8 +25,8 @@ class _State extends State<HomePage> {
   final _controller = StreamController<QuerySnapshot>.broadcast();
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  final SendNotification sendNotification = SendNotification();
   Firestore db = Firestore.instance;
 
   bool logged = false;
@@ -36,11 +39,13 @@ class _State extends State<HomePage> {
     registerNotification();
     configLocalNotification();
     super.initState();
+    sendNotification.sendMessage("Bem-vindo!", "Lojinhas da Uff");
+
   }
 
   void registerNotification() {
     firebaseMessaging.requestNotificationPermissions();
-
+    firebaseMessaging.subscribeToTopic('notifications');
     firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
       print('onMessage: $message');
       showNotification(message['notification']);
@@ -57,6 +62,8 @@ class _State extends State<HomePage> {
       print('token: $token');
     }).catchError((err) {
     });
+
+
   }
 
   void configLocalNotification() {
@@ -113,7 +120,7 @@ class _State extends State<HomePage> {
 
   void _getProvider()async{
     final FirebaseUser user = await auth.currentUser();
-    if(user.providerData[0].providerId == "password" || (user.providerData[1] != null && user.providerData[1].providerId == "password")){
+    if(user.providerData[0].providerId == "password" || user.providerData[1].providerId == "password"){
       logged = true;
     }
   }
