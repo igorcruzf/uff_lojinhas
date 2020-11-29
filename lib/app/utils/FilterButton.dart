@@ -34,7 +34,7 @@ class FilterButtonState extends State<FilterButton> {
         });
         filter(newValue);
       },
-      items: <String>["Todos", 'Praia Vermelha', 'Gragoatá', 'Valonguinho', 'Direito']
+      items: <String>["Todos", 'PV', 'Gragoatá', 'Valonguinho', 'Direito']
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
