@@ -45,7 +45,6 @@ class _ItemEditPageState extends State<ItemEditPage> {
   }
 
   _updateState() {
-    print("name $_name, price: $_price, urlPhoto: $_urlPhoto");
     setState(() {});
   }
 

@@ -59,7 +59,6 @@ class _EmailFormLoginState extends State<EmailFormLogin> {
   }
 
   _updateState() {
-    print("email $_email, password: $_password");
     setState(() {});
   }
 

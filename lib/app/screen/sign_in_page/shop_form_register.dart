@@ -39,8 +39,6 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
   bool _isLoading = false;
 
   _updateState() {
-    print(
-        "name $_name,block: $_block,floor: $_floor, number: $_number");
     setState(() {});
   }
 

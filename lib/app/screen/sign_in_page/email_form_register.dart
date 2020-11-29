@@ -23,7 +23,6 @@ class _EmailFormRegisterState extends State<EmailFormRegister> {
   bool _isLoading = false;
 
   _updateState() {
-    print("email $_email, password: $_password");
     setState(() {});
   }
 

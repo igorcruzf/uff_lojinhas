@@ -61,7 +61,7 @@ class _State extends State<HomePage> {
 
   void configLocalNotification() {
     var initializationSettingsAndroid =
-        new AndroidInitializationSettings('app_icon');
+        new AndroidInitializationSettings('icon');
     var initializationSettingsIOS = new IOSInitializationSettings();
     var initializationSettings = new InitializationSettings(
         initializationSettingsAndroid, initializationSettingsIOS);
@@ -71,8 +71,8 @@ class _State extends State<HomePage> {
   void showNotification(message) async {
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
       'br.uff.uff_lojinhas',
-      'Flutter chat demo',
-      'your channel description',
+      'Flutter notifications',
+      '',
       playSound: true,
       enableVibration: true,
       importance: Importance.Max,
@@ -83,16 +83,11 @@ class _State extends State<HomePage> {
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
     print(message);
-//    print(message['body'].toString());
-//    print(json.encode(message));
 
     await flutterLocalNotificationsPlugin.show(0, message['title'].toString(),
         message['body'].toString(), platformChannelSpecifics,
         payload: json.encode(message));
 
-//    await flutterLocalNotificationsPlugin.show(
-//        0, 'plain title', 'plain body', platformChannelSpecifics,
-//        payload: 'item x');
   }
 
   //Acesso ao banco de dados

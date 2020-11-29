@@ -86,8 +86,6 @@ class _ShopEditPageState extends State<ShopEditPage> {
   }
 
   _updateState() {
-    print(
-        "name $_name,block: $_block,floor: $_floor, number: $_number");
     setState(() {});
   }
 
