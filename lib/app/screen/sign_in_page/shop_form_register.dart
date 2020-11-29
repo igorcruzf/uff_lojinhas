@@ -137,8 +137,8 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
         },
         dataSource: [
           {
-            "display": "Praia Vermelha",
-            "value": "Praia Vermelha",
+            "display": "PV",
+            "value": "PV",
           },
           {
             "display": "Gragoatá",

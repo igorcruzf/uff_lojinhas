@@ -197,14 +197,15 @@ class _State extends State<ShowShopPage> {
                                                     color: const Color(
                                                         0xFF3F3E3E))))
                                       ]),
-                                      Padding(
+                                      Row(children: <Widget>[
+                                        Padding(
                                         padding:  EdgeInsets.only(left: 12),
                                         child:GestureDetector(
                                           onTap: _launchURL,
                                           child: Icon(Whats.whatsapp),
                                         )
                                       ),
-                                      
+                                      ])
                                     ])
                                   ]))),
                       Expanded(

@@ -176,8 +176,8 @@ class _ShopEditPageState extends State<ShopEditPage> {
         },
         dataSource: [
           {
-            "display": "Praia Vermelha",
-            "value": "Praia Vermelha",
+            "display": "PV",
+            "value": "PV",
           },
           {
             "display": "Gragoatá",
