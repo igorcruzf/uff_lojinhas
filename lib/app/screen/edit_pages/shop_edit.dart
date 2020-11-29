@@ -17,10 +17,10 @@ class ShopEditPage extends StatefulWidget with ShopFieldsValidators {
 }
 
 class _ShopEditPageState extends State<ShopEditPage> {
-  TextEditingController _nameController;
-  TextEditingController _blockController;
-  TextEditingController _floorController;
-  TextEditingController _numberController;
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _blockController = TextEditingController();
+  TextEditingController _floorController = TextEditingController();
+  TextEditingController _numberController = TextEditingController();
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _blockFocusNode = FocusNode();
   final FocusNode _floorFocusNode = FocusNode();
@@ -86,8 +86,6 @@ class _ShopEditPageState extends State<ShopEditPage> {
   }
 
   _updateState() {
-    print(
-        "name $_name,block: $_block,floor: $_floor, number: $_number");
     setState(() {});
   }
 
@@ -100,16 +98,17 @@ class _ShopEditPageState extends State<ShopEditPage> {
   }
 
   Future _uploadFile() async {
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        .child('images/${Path.basename(_image.path)}');
-    StorageUploadTask uploadTask = storageReference.putFile(_image);
-    await uploadTask.onComplete;
-    var dowurl = await storageReference.getDownloadURL();
-    setState(() {
-      _urlPhoto = dowurl.toString();
-    });
-    
+    if(_image != null) {
+      StorageReference storageReference = FirebaseStorage.instance
+          .ref()
+          .child('images/${Path.basename(_image.path)}');
+      StorageUploadTask uploadTask = storageReference.putFile(_image);
+      await uploadTask.onComplete;
+      var dowurl = await storageReference.getDownloadURL();
+      setState(() {
+        _urlPhoto = dowurl.toString();
+      });
+    }
   }
 
   final FirebaseAuth auth = FirebaseAuth.instance;

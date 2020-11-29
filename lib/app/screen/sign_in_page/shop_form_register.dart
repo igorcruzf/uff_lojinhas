@@ -39,8 +39,6 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
   bool _isLoading = false;
 
   _updateState() {
-    print(
-        "name $_name,block: $_block,floor: $_floor, number: $_number");
     setState(() {});
   }
 
@@ -63,15 +61,22 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
 
   Future _uploadFile() async {
     try{
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        .child('images/${Path.basename(_image.path)}');
-    StorageUploadTask uploadTask = storageReference.putFile(_image);
-    await uploadTask.onComplete;
-    var dowurl = await storageReference.getDownloadURL();
-    setState(() {
-      _urlPhoto = dowurl.toString();
-    });
+      if(_image != null){
+        StorageReference storageReference = FirebaseStorage.instance
+            .ref()
+            .child('images/${Path.basename(_image.path)}');
+        StorageUploadTask uploadTask = storageReference.putFile(_image);
+        await uploadTask.onComplete;
+        var dowurl = await storageReference.getDownloadURL();
+        setState(() {
+          _urlPhoto = dowurl.toString();
+        });
+      } else {
+        setState(() {
+          _urlPhoto = 'https://letsdishrecipes.com/wp-content/uploads/2019/09/404-error-logo.jpg';
+        });
+      }
+
     } catch (err){
       print(err);
       return;

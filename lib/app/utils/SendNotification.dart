@@ -33,6 +33,5 @@ class SendNotification {
         },
       ),
     );
-    print(result);
   }
 }

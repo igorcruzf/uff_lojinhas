@@ -31,7 +31,6 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
   bool _isLoading = false;
 
   _updateState() {
-    print("name $_name, price: $_price, urlPhoto: $_urlPhoto");
     setState(() {});
   }
 
