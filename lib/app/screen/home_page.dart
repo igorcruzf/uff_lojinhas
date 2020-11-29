@@ -10,8 +10,6 @@ import 'package:uff_lojinhas/app/utils/FilterButton.dart';
 import 'package:uff_lojinhas/app/utils/SendNotification.dart';
 import 'package:uff_lojinhas/services/auth.dart';
 
-
-
 import 'edit_pages/home_edit.dart';
 import '../utils/CardShop.dart';
 import '../model/Shop.dart';
@@ -25,7 +23,8 @@ class _State extends State<HomePage> {
   final _controller = StreamController<QuerySnapshot>.broadcast();
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   final SendNotification sendNotification = SendNotification();
   Firestore db = Firestore.instance;
 
@@ -57,15 +56,12 @@ class _State extends State<HomePage> {
 
     firebaseMessaging.getToken().then((token) {
       print('token: $token');
-    }).catchError((err) {
-    });
-
-
+    }).catchError((err) {});
   }
 
   void configLocalNotification() {
     var initializationSettingsAndroid =
-    new AndroidInitializationSettings('app_icon');
+        new AndroidInitializationSettings('app_icon');
     var initializationSettingsIOS = new IOSInitializationSettings();
     var initializationSettings = new InitializationSettings(
         initializationSettingsAndroid, initializationSettingsIOS);
