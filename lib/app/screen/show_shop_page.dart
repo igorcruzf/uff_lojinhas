@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../whats_icons.dart';
+import '../utils/whats_icons.dart';
 import '../utils/CardItem.dart';
 import '../model/Shop.dart';
 import '../model/Item.dart';

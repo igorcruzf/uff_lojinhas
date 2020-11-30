@@ -46,18 +46,25 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
   }
 
   Future _uploadFile() async {
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        .child('images/${Path.basename(_image.path)}');
-    StorageUploadTask uploadTask = storageReference.putFile(_image);
-    await uploadTask.onComplete;
-    var dowurl = await storageReference.getDownloadURL();
-    setState(() {
-      _urlPhoto = dowurl;
-    });
+    if(_image != null){
+      StorageReference storageReference = FirebaseStorage.instance
+          .ref()
+          .child('images/${Path.basename(_image.path)}');
+      StorageUploadTask uploadTask = storageReference.putFile(_image);
+      await uploadTask.onComplete;
+      var dowurl = await storageReference.getDownloadURL();
+      setState(() {
+        _urlPhoto = dowurl;
+      });
+    } else{
+      setState(() {
+        _urlPhoto = 'https://cdn.dribbble.com/users/1661862/screenshots/5931432/404-preview.jpg?compress=1&resize=400x300';
+      });
+    }
+
   }
 
-  void _submit() async {
+  Future<void> _submit() async {
     setState(() {
       _submitted = true;
       _isLoading = true;
@@ -80,7 +87,7 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
   }
 
   void _submitMore() async {
-    _submit();
+    await _submit();
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         fullscreenDialog: false,
@@ -92,7 +99,7 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
   void _submitFinal() async {
     SendNotification sendNotification = SendNotification();
 
-    _submit();
+    await _submit();
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         fullscreenDialog: false,
