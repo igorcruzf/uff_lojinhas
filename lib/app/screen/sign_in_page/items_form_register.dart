@@ -88,6 +88,7 @@ class _ItemsFormRegisterState extends State<ItemsFormRegister> {
 
   void _submitMore() async {
     await _submit();
+    Navigator.of(context).pop();
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         fullscreenDialog: false,

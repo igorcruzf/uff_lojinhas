@@ -101,6 +101,7 @@ class _ShopFormRegisterState extends State<ShopFormRegister> {
         "urlPhoto": _urlPhoto,
         "number": _number
       });
+      Navigator.of(context).pop();
       Navigator.of(context).push(
         MaterialPageRoute<void>(
           fullscreenDialog: false,

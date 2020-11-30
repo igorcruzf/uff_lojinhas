@@ -134,12 +134,7 @@ class _ShopEditPageState extends State<ShopEditPage> {
           .then((value) => print("Shop Updated"))
           .catchError((error) => print("Failed to update shop: $error"));
 
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          fullscreenDialog: false,
-          builder: (context) => HomeEditPage(),
-        ),
-      );
+      Navigator.of(context).pop();
     } finally {
       setState(() {
         _isLoading = false;

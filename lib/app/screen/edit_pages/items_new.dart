@@ -88,6 +88,7 @@ class _ItemsFormNewState extends State<ItemsFormNew> {
 
   void _submitMore() async {
     _submit();
+    Navigator.of(context).pop();
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         fullscreenDialog: false,
@@ -98,12 +99,7 @@ class _ItemsFormNewState extends State<ItemsFormNew> {
 
   void _submitFinal() async {
     _submit();
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        fullscreenDialog: false,
-        builder: (context) => HomeEditPage(),
-      ),
-    );
+    Navigator.of(context).pop();
   }
 
   TextField _nameTextField() {

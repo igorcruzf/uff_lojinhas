@@ -91,12 +91,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
           .then((value) => print("Item Updated"))
           .catchError((error) => print("Failed to update item: $error"));
 
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          fullscreenDialog: false,
-          builder: (context) => HomeEditPage(),
-        ),
-      );
+      Navigator.of(context).pop();
     } finally {
       setState(() {
         _isLoading = false;

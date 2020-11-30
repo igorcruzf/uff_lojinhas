@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "764793045925",
-    "firebase_url": "https://uff-lojinhas.firebaseio.com",
-    "project_id": "uff-lojinhas",
-    "storage_bucket": "uff-lojinhas.appspot.com"
+    "project_number": "440436605612",
+    "firebase_url": "https://uff-lojinhas-195ba.firebaseio.com",
+    "project_id": "uff-lojinhas-195ba",
+    "storage_bucket": "uff-lojinhas-195ba.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:764793045925:android:2f9a276246b57259719e4c",
+        "mobilesdk_app_id": "1:440436605612:android:787e2c7206ecdbcbc39509",
         "android_client_info": {
           "package_name": "br.uff.uff_lojinhas"
         }
       },
       "oauth_client": [
         {
-          "client_id": "764793045925-9jg06pcplcjsjm0e5fvfjlkptejie55f.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "br.uff.uff_lojinhas",
-            "certificate_hash": "31cc61b08072a451667101b806f0db2b6f9bf511"
-          }
-        },
-        {
-          "client_id": "764793045925-gflllgpkr21822fupjm0iv2tc5jgppag.apps.googleusercontent.com",
+          "client_id": "440436605612-1063od14juv8ifsq570qhfmkko39t7jb.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB94KE2K-3FV4E-I-_92_Xct8TTSrFVJtk"
+          "current_key": "AIzaSyDIJ7M5rxfuczQx0Lb5F7tB-k8avj8Ygno"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "764793045925-gflllgpkr21822fupjm0iv2tc5jgppag.apps.googleusercontent.com",
+              "client_id": "440436605612-1063od14juv8ifsq570qhfmkko39t7jb.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
