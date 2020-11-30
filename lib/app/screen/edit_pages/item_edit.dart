@@ -142,6 +142,7 @@ class _ItemEditPageState extends State<ItemEditPage> {
       SizedBox(height: 16),
       _priceTextField(),
       SizedBox(height: 32),
+      Row(children:<Widget>[Text("Atenção: itens sem imagens não serão cadastrados")]),
       _uploadPhotoField(),
       SizedBox(height: 32),
       RaisedButton(

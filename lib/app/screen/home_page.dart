@@ -121,12 +121,18 @@ class _State extends State<HomePage> {
         .add(CardShop(Shop.mapToShop(shop.data)))); //Cria um card por loja
 
     if (cardList.isEmpty) {
-      cardList.add(Text(
-        "Nenhuma lojinha encontrada =/",
-        textAlign: TextAlign.center,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-      ));
+      cardList.add(
+          Text(
+            "Nenhuma loja encontrada.",
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+                fontFamily: 'sans',
+                decoration: TextDecoration.none,
+                color: Colors.indigo
+            )));
     }
 
     return cardList;
