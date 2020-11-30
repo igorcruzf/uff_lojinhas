@@ -102,18 +102,31 @@ class _State extends State<ItemsRemovePage > {
                 QuerySnapshot querySnapshot = snapshot.data;
 
                 if (querySnapshot.documents.length == 0) {
-                  return Center(
-                    child: Text(
-                      "A loja não tem itens" +
-                          querySnapshot.documents.length.toString(),
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  );
+                  return Scaffold(
+                      appBar: AppBar(
+                          title: Text("Escolha o item a ser removido"),
+                          backgroundColor: Colors.indigo),
+                      body: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    "A loja não possui itens.",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 25,
+                                        fontFamily: 'sans',
+                                        decoration: TextDecoration.none,
+                                        color: Colors.indigo),
+                                  )
+                                ])
+                          ]));
                 }
                 return Scaffold(
                     appBar: AppBar(
-                      title: Text("Escolha o item a remover"),
+                      title: Text("Escolha o item a ser removido"),
                       backgroundColor: Colors.indigo,
                     ),
                     body: new Container(
