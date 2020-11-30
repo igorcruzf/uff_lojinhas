@@ -7,10 +7,11 @@ import "../home_page.dart";
 
 class HomeEditPage extends StatelessWidget {
   void _toHome(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-          fullscreenDialog: false, builder: (context) => HomePage()),
-    );
+    Navigator.of(context).popUntil((route) => route.isFirst);
+    // Navigator.of(context).push(
+    //   MaterialPageRoute<void>(
+    //       fullscreenDialog: false, builder: (context) => HomePage()),
+    // );
   }
 
   void _editShop(BuildContext context) {
