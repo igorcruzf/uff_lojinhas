@@ -108,9 +108,13 @@ class _State extends State<HomePage> {
 
   void _getProvider() async {
     final FirebaseUser user = await auth.currentUser();
-    if (user.providerData[0].providerId == "password" ||
-        user.providerData[1].providerId == "password") {
-      logged = true;
+    try{
+      if (user.providerData[0].providerId == "password" ||
+          user.providerData[1].providerId == "password") {
+        logged = true;
+      }
+    } catch (err){
+
     }
   }
 
